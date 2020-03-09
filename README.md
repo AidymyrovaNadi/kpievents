@@ -1,4 +1,4 @@
-# kpievents
+# KPIEvents
 -------------------------------------------------
 
 ## What is KPIEvents?
