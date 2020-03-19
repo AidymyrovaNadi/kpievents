@@ -24,3 +24,17 @@ KPIEvents is calendar that structures all events in KPI.
 
 - Administrators and editors could edit events directly on the main page.
 
+-------------------------------------------------
+
+## Visualisation
+
+![Visualisation](imgReadMe/Desktop-design.png)
+
+## Technologies
+
+**Frontend:** React, hooks
+**Backend:** Node
+**DB:** PostgreSQL
+**Deploy, CI/CD:** Heroku
+
+![Data](imgReadMe/scheme1.png)
