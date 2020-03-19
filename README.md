@@ -32,9 +32,12 @@ KPIEvents is calendar that structures all events in KPI.
 
 ## Technologies
 
-**Frontend:** React, hooks
+**Frontend:** React, hooks 
+
 **Backend:** Node
+
 **DB:** PostgreSQL
+
 **Deploy, CI/CD:** Heroku
 
 ![Data](imgReadMe/scheme1.png)
