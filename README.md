@@ -3,21 +3,24 @@
 
 ## What is KPIEvents?
 
-KPIEvents is a KPI events calendar that structures all university events.
+KPIEvents is calendar that structures all events in KPI.
 
 -------------------------------------------------
 ## Minimum plan
 
-- __Taking data from the database and showing it to the user.__
+- Create simple user-friendly calendar.
 
-- __Editing existing events in the calendar with authorization, which is divided into administrators and editors.__
+- Editing existing events in the calendar with authorization, which is divided into administrators and editors.
 
-- __Administrator's review of submittet events by editors.__
+- Administrator's review of submittet events by editors.
+
+- Telegram bot with everyday reminders about upcoming events
 
 ## Advanced plan
 
 - Tags assignment (organizer, venue, theme).
 
-- Submitted events review in separate Telegram Bot.
+- Submitted events reviewing in separate Telegram Bot.
 
-- Agenda in picture.
+- Administrators and editors could edit events directly on the main page.
+
