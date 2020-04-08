@@ -41,3 +41,6 @@ KPIEvents is calendar that structures all events in KPI.
 **Deploy, CI/CD:** Heroku
 
 ![Data](imgReadMe/scheme1.png)
+
+
+![Data](imgReadMe/ER_Diagram.png)
