@@ -41,8 +41,8 @@ KPIEvents is calendar that structures all events in KPI.
 
 ![Data](imgReadMe/scheme1.png)
 
-## Entity Relationship Diagram (ERD)
-
 -------------------------------------------------
+
+## Entity Relationship Diagram (ERD)
 
 ![Data](imgReadMe/ER_Diagram.PNG)
