@@ -1,0 +1,33 @@
+{
+  "name": "kpievents",
+  "version": "1.0.0",
+  "description": "KPIEvents is calendar that structures all events in KPI.",
+  "engines": {
+    "node": "12.x"
+  },
+  "scripts": {
+    "start": "npm run server && npm run bot && npm run client",
+    "server": "node server",
+    "bot": "node telegram-bot",
+    "client": "cd client && npm run start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "cacheDirectories": [
+    "node_modules",
+    "client/node_modules",
+    "telegram-bot/node_modules"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AidymyrovaNadi/kpievents.git"
+  },
+  "keywords": [
+    "KPI"
+  ],
+  "author": "Kishko Igor, Aidymyrova Nadi, Borshosh Sasha",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/AidymyrovaNadi/kpievents/issues"
+  },
+  "homepage": "https://github.com/AidymyrovaNadi/kpievents#readme"
+}
