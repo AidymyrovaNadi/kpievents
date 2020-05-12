@@ -7,10 +7,12 @@
   },
   "scripts": {
     "start": "start npm run client && start npm run server && start npm run bot",
-    "build": "npm run client & npm run server & npm run bot",
+    "build": "npm run install && (npm run client & npm run server & npm run bot)",
+    "install": "(cd client/ && npm i) & (cd server/ && npm i) & (cd telegram-bot/ & npm i)",
     "server": "node server",
     "bot": "node telegram-bot",
     "client": "cd client && npm run start",
+    "buildClient": "cd client && npm run build",
     "test": "eslint **/*.js",
     "fix": "eslint **/*.js --fix"
   },
@@ -35,5 +37,6 @@
   "homepage": "https://github.com/AidymyrovaNadi/kpievents#readme",
   "devDependencies": {
     "eslint": "^7.0.0"
-  }
+  },
+  "dependencies": {}
 }
