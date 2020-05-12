@@ -6,15 +6,18 @@
     "node": "12.x"
   },
   "scripts": {
-    "start": "npm run server && npm run bot && npm run client",
+    "start": "start npm run client && start npm run server && start npm run bot",
+    "build": "npm run client & npm run server & npm run bot",
     "server": "node server",
     "bot": "node telegram-bot",
     "client": "cd client && npm run start",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "eslint **/*.js",
+    "fix": "eslint **/*.js --fix"
   },
   "cacheDirectories": [
     "node_modules",
     "client/node_modules",
+    "server/node_modules",
     "telegram-bot/node_modules"
   ],
   "repository": {
@@ -29,5 +32,8 @@
   "bugs": {
     "url": "https://github.com/AidymyrovaNadi/kpievents/issues"
   },
-  "homepage": "https://github.com/AidymyrovaNadi/kpievents#readme"
+  "homepage": "https://github.com/AidymyrovaNadi/kpievents#readme",
+  "devDependencies": {
+    "eslint": "^7.0.0"
+  }
 }
