@@ -8,7 +8,8 @@
   "private": true,
   "workspaces": ["telegram-bot", "server", "client"],
   "scripts": {
-    "start": "start npm run client && start npm run server && start npm run bot",
+    "start": "npm run client && npm run server && npm run bot",
+    "dev": "start npm run client && start npm run server && start npm run bot",
     "build": "cd client && npm run build",
     "server": "node server",
     "bot": "node telegram-bot",
