@@ -35,7 +35,6 @@
   "bugs": {
     "url": "https://github.com/AidymyrovaNadi/kpievents/issues"
   },
-  "homepage": "https://github.com/AidymyrovaNadi/kpievents#readme",
   "devDependencies": {
     "eslint": "^6.6.0"
   },
