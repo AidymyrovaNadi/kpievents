@@ -5,10 +5,11 @@
   "engines": {
     "node": "12.x"
   },
+  "private": true,
+  "workspaces": ["telegram-bot", "server", "client"],
   "scripts": {
     "start": "start npm run client && start npm run server && start npm run bot",
-    "build": "npm run install && (npm run client & npm run server & npm run bot)",
-    "install": "(cd client/ && npm i) & (cd server/ && npm i) & (cd telegram-bot/ & npm i)",
+    "build": "npm run buildClient & npm run server & npm run bot",
     "server": "node server",
     "bot": "node telegram-bot",
     "client": "cd client && npm run start",
@@ -36,7 +37,7 @@
   },
   "homepage": "https://github.com/AidymyrovaNadi/kpievents#readme",
   "devDependencies": {
-    "eslint": "^7.0.0"
+    "eslint": "^6.6.0"
   },
   "dependencies": {}
 }
