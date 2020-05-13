@@ -10,7 +10,6 @@
   "scripts": {
     "start": "start npm run client && start npm run server && start npm run bot",
     "build": "cd client && npm run build",
-    "postinstall": "npm run server & npm run bot",
     "server": "node server",
     "bot": "node telegram-bot",
     "client": "cd client && npm run start",
