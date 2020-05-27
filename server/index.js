@@ -3,6 +3,7 @@
 const fs = require('fs');
 const http = require('http');
 const path = require('path');
+const ApiRouting = require('./api');
 
 const STATIC_PATH = path.join(process.cwd(), '/client/build');
 
@@ -37,16 +38,20 @@ http.createServer((req, res) => {
   const query = req.url;
   const fileExt = path.extname(query).substring(1);
 
-  console.log(query);
 
   //If there an API call like '/api/*', goto api
   //If there non-file get call, send index, that cause client side routing
   //In other cases send file
 
   if (fileExt === '' && /^\/api\/\D*$/.test(query)) {
-    // res.writeHead(200, { 'Content-Type': MIME_TYPES.json });
-    // res.end(JSON.stringify({foo: "bar"}))
-    console.log('kekeke');
+
+    const some = ApiRouting(req);
+
+    res.writeHead(200, { 'Content-Type': MIME_TYPES.json });
+    res.end(JSON.stringify(some));
+
+
+
   } else if (fileExt === '') {
     res.writeHead(200, { 'Content-Type': MIME_TYPES.html });
     const stream = serveFile('index.html');
