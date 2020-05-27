@@ -14,7 +14,7 @@
     "server": "node server",
     "bot": "node telegram-bot",
     "client": "cd client && npm run start",
-    "test": "eslint **/*.js",
+    "lint": "eslint **/*.js",
     "fix": "eslint **/*.js --fix"
   },
   "cacheDirectories": [

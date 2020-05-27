@@ -1,22 +1,57 @@
 'use strict';
 
+const fs = require('fs');
 const http = require('http');
+const path = require('path');
 
-const hostname = '0.0.0.0';
-const port = 3000;
+const STATIC_PATH = path.join(process.cwd(), '../client/build');
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World\n');
-});
+const MIME_TYPES = {
+  html: 'text/html; charset=UTF-8',
+  js: 'application/javascript; charset=UTF-8',
+  json: 'application/json',
+  css: 'text/css',
+  png: 'image/png',
+  ico: 'image/x-icon',
+  svg: 'image/svg+xml',
+  plain: 'text/plain',
+};
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
+const serveFile = name => {
+  const filePath = path.join(STATIC_PATH, name);
 
-server.on('error', err => {
-  if (err.code === 'EACCES') {
-    console.log(`No access to port: ${port}`);
+  if (!filePath.startsWith(STATIC_PATH)) {
+    console.log(`Can't be served: ${name}`);
+    return null;
   }
-});
+
+  const stream = fs.createReadStream(filePath);
+  console.log(`Served: ${name}`);
+
+  return stream;
+};
+
+
+
+http.createServer((req, res) => {
+  const query = req.url;
+  const fileExt = path.extname(query).substring(1);
+
+  //If there an API call like '/api/*', goto api
+  //If there non-file get call, send index, that cause client side routing
+  //In other cases send file
+
+  if (fileExt === '' && /^\/api\/\D*$/.test(query)) {
+    console.log('mock');
+  } else if (fileExt === '') {
+    res.writeHead(200, { 'Content-Type': MIME_TYPES.html });
+    const stream = serveFile('index.html');
+    if (stream) stream.pipe(res);
+  } else {
+    const mimeType = MIME_TYPES[fileExt] || MIME_TYPES.plain;
+    res.writeHead(200, { 'Content-Type': mimeType });
+    const stream = serveFile(query);
+    if (stream) stream.pipe(res);
+  }
+
+}).listen(process.env.PORT || 8000);

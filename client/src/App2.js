@@ -1,15 +1,14 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { Link } from 'react-router-dom';
 
-function App() {
+function App2() {
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.js</code> <Link to='/sec'>save to reload.</Link>
+          vvvvvvvvvvv
         </p>
         <a
           className="App-link"
@@ -24,4 +23,4 @@ function App() {
   );
 }
 
-export default App;
+export default App2;
