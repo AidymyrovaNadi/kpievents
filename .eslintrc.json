@@ -92,7 +92,7 @@
       }
     ],
     "max-len": [
-      "error",
+      "warn",
       {
         "code": 80,
         "ignoreUrls": true

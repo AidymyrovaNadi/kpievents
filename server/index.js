@@ -48,6 +48,7 @@ http.createServer((req, res) => {
     const some = ApiRouting(req);
 
     res.writeHead(200, { 'Content-Type': MIME_TYPES.json });
+    console.log(some + ' index');
     res.end(JSON.stringify(some));
 
 

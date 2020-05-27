@@ -20,14 +20,30 @@ pool.connect((err, client, release) => {
   });
 });
 
+const EVENT_SELECT = `SELECT ${['id_event', 'id_editor', 'id_writer', 'title', 'description', 'place', 'datetime'].join(', ')} FROM public.vevent`;
+
 
 const ApiRouting = req => {
 
   const query = req.url.slice(4);
+  let result;
 
   switch (query) {
   case '/events':
     console.log('events');
+    pool.query(EVENT_SELECT, (err, res) => {
+      if (err) {
+        return console.error(err.stack);
+      } else {
+        result = [];
+
+        for (const row of res.rows) {
+          result.push(row);
+        }
+
+        console.log(result);
+      }
+    });
     break;
   case '/events/today':
     console.log('today');
@@ -36,8 +52,7 @@ const ApiRouting = req => {
     console.log('err');
     break;
   }
-
-  return { dbGo: 'brrr brrrr' };
+  return result;
 };
 
 module.exports = ApiRouting;
