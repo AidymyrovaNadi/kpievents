@@ -7,25 +7,37 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false },
 });
 
-const ApiRouting = (req) => {
+pool.connect((err, client, release) => {
+  if (err) {
+    return console.error('Error acquiring client', err.stack);
+  }
+  client.query('SELECT NOW()', (err, result) => {
+    release();
+    if (err) {
+      return console.error('Error executing query', err.stack);
+    }
+    console.log(result.rows);
+  });
+});
+
+
+const ApiRouting = req => {
 
   const query = req.url.slice(4);
 
-  let result;
-
   switch (query) {
-    case '/events':
-      console.log('events');
-      break;
-    case '/events/today':
-      console.log('today');
-      break;
-    default:
-      console.log('err');
-      break;
+  case '/events':
+    console.log('events');
+    break;
+  case '/events/today':
+    console.log('today');
+    break;
+  default:
+    console.log('err');
+    break;
   }
 
-  return {db_go: 'brrr brrrr'}
+  return { dbGo: 'brrr brrrr' };
 };
 
 module.exports = ApiRouting;
