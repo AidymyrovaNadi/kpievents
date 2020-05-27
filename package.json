@@ -5,6 +5,7 @@
   "engines": {
     "node": "12.x"
   },
+  "homepage": "http://kpievents.herokuapp.com",
   "private": true,
   "workspaces": ["telegram-bot", "server", "client"],
   "scripts": {
