@@ -42,7 +42,8 @@ http.createServer((req, res) => {
   //In other cases send file
 
   if (fileExt === '' && /^\/api\/\D*$/.test(query)) {
-    console.log('mock');
+    res.writeHead(200, { 'Content-Type': MIME_TYPES.json });
+    res.end(JSON.stringify({foo: "bar"}))
   } else if (fileExt === '') {
     res.writeHead(200, { 'Content-Type': MIME_TYPES.html });
     const stream = serveFile('index.html');
