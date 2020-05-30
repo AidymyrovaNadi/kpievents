@@ -20,39 +20,92 @@ pool.connect((err, client, release) => {
   });
 });
 
-const EVENT_SELECT = `SELECT ${['id_event', 'id_editor', 'id_writer', 'title', 'description', 'place', 'datetime'].join(', ')} FROM public.vevent`;
+const paramsString = '/events&startdate=1999-01-08T04:05:06Z';
+const searchParams = new URLSearchParams(paramsString);
 
 
-const ApiRouting = req => {
+// Итерируем параметры поиска.
+for (const p of searchParams) {
+  console.log(p);
+}
+const values = ['id_event', 'id_editor', 'id_writer', 'title', 'description', 'place', 'datetime'];
 
-  const query = req.url.slice(4);
+const SelectEvents = searchParams => {
+
   let result;
+  let EVENT_SELECT;
 
-  switch (query) {
-  case '/events':
-    console.log('events');
-    pool.query(EVENT_SELECT, (err, res) => {
-      if (err) {
-        return console.error(err.stack);
-      } else {
-        result = [];
+  if (searchParams.has('enddate') && searchParams.has('startdate')) {
+    const startDate = searchParams.get('startdate');
+    const endDate = searchParams.get('enddate');
 
-        for (const row of res.rows) {
-          result.push(row);
-        }
+    // eslint-disable-next-line max-len
+    EVENT_SELECT = `SELECT ${values.join(', ')} FROM public.vevent WHERE datetime >= ${startDate} OR datetime <= ${endDate}`;
+    return EVENT_SELECT;
 
-        console.log(result);
-      }
-    });
-    break;
-  case '/events/today':
-    console.log('today');
-    break;
-  default:
-    console.log('err');
-    break;
+  } else if (searchParams.has('startdate') && !searchParams.has('startdate')) {
+    const startDate = searchParams.get('startdate');
+
+    // eslint-disable-next-line max-len
+    EVENT_SELECT = `SELECT ${values.join(', ')} FROM public.vevent WHERE datetime = ${startDate}`;
+    return EVENT_SELECT;
+
+  } else if (searchParams.has('id')) {
+    const Id = searchParams.get('id');
+
+    // eslint-disable-next-line max-len
+    EVENT_SELECT = `SELECT ${values.join(', ')} FROM public.vevent WHERE id_event = ${Id}`;
+    return EVENT_SELECT;
   }
+
+  pool.query(EVENT_SELECT, (err, res) => {
+    if (err) {
+      return console.error(err.stack);
+    } else {
+      result = [];
+
+      for (const row of res.rows) {
+        result.push(row);
+      }
+
+      console.log(result);
+    }
+  });
+
   return result;
 };
 
-module.exports = ApiRouting;
+module.exports = SelectEvents;
+
+
+
+
+// const selectByDate = new Map();
+//
+// selectByDate.set('StartDate', startDate);
+// selectByDate.set('EndDate', endDate);
+// if (!selectByDate.has('EndDate')) {
+//   console.log('Beijing:', selectByDate.get('Beijing'));
+// }
+
+// const ApiRouting = req => {
+//
+//   const query = req.url.slice(4);
+//   // let result;
+//   //
+//   // pool.query(EVENT_SELECT, (err, res) => {
+//   //   if (err) {
+//   //     return console.error(err.stack);
+//   //   } else {
+//   //     result = [];
+//   //
+//   //     for (const row of res.rows) {
+//   //       result.push(row);
+//   //     }
+//   //
+//   //     console.log(result);
+//   //   }
+//   // });
+//   return result;
+// };
+
