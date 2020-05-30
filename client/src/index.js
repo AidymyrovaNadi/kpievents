@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 
 import './index.css';
 
-import Logo from './img/logo.png';
+import Logo from '../src/img/logo.png';
 
 import Main from './pages/Main';
 import App2 from './App2';
