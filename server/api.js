@@ -28,27 +28,40 @@ const searchParams = new URLSearchParams(paramsString);
 for (const p of searchParams) {
   console.log(p);
 }
+
+// eslint-disable-next-line max-len
 const values = ['id_event', 'id_editor', 'id_writer', 'title', 'description', 'place', 'datetime'];
 
 const SelectEvents = searchParams => {
 
   let result;
   let EVENT_SELECT;
+  let query;
 
   if (searchParams.has('enddate') && searchParams.has('startdate')) {
     const startDate = searchParams.get('startdate');
     const endDate = searchParams.get('enddate');
+    EVENT_SELECT = `SELECT ${values.join(', ')} FROM public.vevent WHERE datetime >= $1 OR datetime <= $2`;
 
+    query = {
+      text: EVENT_SELECT,
+      value: [startDate, endDate],
+    };
     // eslint-disable-next-line max-len
-    EVENT_SELECT = `SELECT ${values.join(', ')} FROM public.vevent WHERE datetime >= ${startDate} OR datetime <= ${endDate}`;
+
     return EVENT_SELECT;
 
-  } else if (searchParams.has('startdate') && !searchParams.has('startdate')) {
+  } else if (searchParams.has('startdate') && !searchParams.has('enddate')) {
     const startDate = searchParams.get('startdate');
 
     // eslint-disable-next-line max-len
-    EVENT_SELECT = `SELECT ${values.join(', ')} FROM public.vevent WHERE datetime = ${startDate}`;
-    return EVENT_SELECT;
+    EVENT_SELECT = `SELECT ${values.join(', ')} FROM public.vevent WHERE datetime >= $1`;
+
+    query = {
+      text: EVENT_SELECT,
+      value: [startDate],
+    };
+    console.log(typeof startDate);
 
   } else if (searchParams.has('id')) {
     const Id = searchParams.get('id');
@@ -58,7 +71,7 @@ const SelectEvents = searchParams => {
     return EVENT_SELECT;
   }
 
-  pool.query(EVENT_SELECT, (err, res) => {
+  pool.query(query.text, query.value, (err, res) => {
     if (err) {
       return console.error(err.stack);
     } else {
@@ -74,6 +87,8 @@ const SelectEvents = searchParams => {
 
   return result;
 };
+
+SelectEvents(searchParams);
 
 module.exports = SelectEvents;
 
