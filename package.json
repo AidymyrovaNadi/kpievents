@@ -9,7 +9,6 @@
   "workspaces": ["telegram-bot", "server", "client"],
   "scripts": {
     "start": "npm run server",
-    "dev": "start npm run client && start npm run server && start npm run bot",
     "build": "cd client && npm run build",
     "server": "node server",
     "bot": "node telegram-bot",

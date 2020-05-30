@@ -1,0 +1,10 @@
+.main {
+    width: 100%;
+
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-evenly;
+}
+.column {
+    width: 30%;
+}
