@@ -6,7 +6,11 @@
     "node": "12.x"
   },
   "private": true,
-  "workspaces": ["telegram-bot", "server", "client"],
+  "workspaces": [
+    "telegram-bot",
+    "server",
+    "client"
+  ],
   "scripts": {
     "start": "npm run server",
     "build": "cd client && npm run build",
@@ -37,5 +41,7 @@
   "devDependencies": {
     "eslint": "^6.6.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "dotenv": "^8.2.0"
+  }
 }

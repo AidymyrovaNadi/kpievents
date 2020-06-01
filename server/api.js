@@ -2,8 +2,10 @@
 
 const { Pool } = require('pg');
 
+require('dotenv').config();
+
 const pool = new Pool({
-  connectionString: 'postgres://sclvmlgenafkur:41626924654771cbd114cf5a92c4587db6292ab822b97414fd428c07f426efac@ec2-18-206-84-251.compute-1.amazonaws.com:5432/d61frdr3v14ijh',
+  connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false },
 });
 
@@ -33,6 +35,8 @@ for (const p of searchParams) {
 const values = ['id_event', 'id_editor', 'id_writer', 'title', 'description', 'place', 'datetime'];
 
 const SelectEvents = searchParams => {
+
+  console.log(process.env.DATABASE_URL);
 
   let result;
   let EVENT_SELECT;
