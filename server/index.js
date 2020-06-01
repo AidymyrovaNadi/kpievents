@@ -3,7 +3,7 @@
 const fs = require('fs');
 const http = require('http');
 const path = require('path');
-const ApiRouting = require('./api');
+const SelectEvents = require('./api');
 
 const STATIC_PATH = path.join(process.cwd(), '/client/build');
 
@@ -45,11 +45,27 @@ http.createServer((req, res) => {
 
   if (fileExt === '' && /^\/api\/\D*$/.test(query)) {
 
-    const some = ApiRouting(req);
+    const paramsString = '/events&startdate=1999-01-08T04:05:06Z';
+    const searchParams = new URLSearchParams(paramsString);
 
-    res.writeHead(200, { 'Content-Type': MIME_TYPES.json });
-    console.log(some + ' index');
-    res.end(JSON.stringify(some));
+    SelectEvents(searchParams, (err, ress) => {
+      if (err) {
+        return console.error(err.stack);
+      } else {
+        const result = [];
+
+        for (const row of ress.rows) {
+          result.push(row);
+        }
+
+        res.writeHead(200, { 'Content-Type': MIME_TYPES.json });
+        console.log(result);
+        res.end(JSON.stringify(result));
+
+      }
+    });
+
+
 
 
 
