@@ -22,20 +22,11 @@ pool.connect((err, client, release) => {
   });
 });
 
-
-
-
-// Итерируем параметры поиска.
-// for (const p of searchParams) {
-//   console.log(p);
-// }
-
 // eslint-disable-next-line max-len
 const values = ['id_event', 'id_editor', 'id_writer', 'title', 'description', 'place', 'datetime'];
 
 const SelectEvents = (searchParams, callback) => {
 
-  const result = [];
   let EVENT_SELECT;
   let query;
 
@@ -49,9 +40,6 @@ const SelectEvents = (searchParams, callback) => {
       text: EVENT_SELECT,
       value: [startDate, endDate],
     };
-    // eslint-disable-next-line max-len
-
-    return EVENT_SELECT;
 
   } else if (searchParams.has('startdate') && !searchParams.has('enddate')) {
     const startDate = searchParams.get('startdate');
@@ -64,13 +52,16 @@ const SelectEvents = (searchParams, callback) => {
       value: [startDate],
     };
 
-
   } else if (searchParams.has('id')) {
     const Id = searchParams.get('id');
 
     // eslint-disable-next-line max-len
-    EVENT_SELECT = `SELECT ${values.join(', ')} FROM public.vevent WHERE id_event = ${Id}`;
-    return EVENT_SELECT;
+    EVENT_SELECT = `SELECT ${values.join(', ')} FROM public.vevent WHERE id_event = $1`;
+
+    query = {
+      text: EVENT_SELECT,
+      value: [Id],
+    };
   }
 
   pool.query(query.text, query.value, callback);
@@ -107,6 +98,6 @@ module.exports = SelectEvents;
 //   //     console.log(result);
 //   //   }
 //   // });
-//   return result;
+//   // return result;
 // };
 
