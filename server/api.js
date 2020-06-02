@@ -25,7 +25,40 @@ pool.connect((err, client, release) => {
 // eslint-disable-next-line max-len
 const values = ['id_event', 'id_editor', 'id_writer', 'title', 'description', 'place', 'datetime'];
 
-const SelectEvents = (searchParams, callback) => {
+const postEvents = (req, callback) => {
+  let body = '';
+
+  // eslint-disable-next-line max-len
+  const EVENT_INSERT = `INSERT INTO 
+  public.vevent(id_editor, id_writer, title, description, place, datetime) 
+  VALUES($1, $2, $3, $4, $5, $6) RETURNING *`;
+
+  // eslint-disable-next-line max-len
+  //body = [4, 3, 'Poliana Dance', 'Party for true dancer', 'Poliana', '2020-08-30T18:15:00Z'];
+
+  req.on('data', chunk => {
+    body += chunk.toString(); // convert Buffer to string
+  });
+
+  const query = {
+    text: EVENT_INSERT,
+    value: JSON.parse(body),
+  };
+
+  pool.query(query.text, query.value, callback);
+
+  // (err, res) => {
+  //   if (err) {
+  //     return console.error(err.stack);
+  //   } else {
+  //     for (const row of res.rows) {
+  //       console.log(JSON.stringify(row));
+  //     }
+  //   }
+  // }
+};
+
+const getEvents = (searchParams, callback) => {
 
   let EVENT_SELECT;
   let query;
@@ -35,7 +68,8 @@ const SelectEvents = (searchParams, callback) => {
     const endDate = searchParams.get('enddate');
 
     // eslint-disable-next-line max-len
-    EVENT_SELECT = `SELECT ${values.join(', ')} FROM public.vevent WHERE datetime >= $1 OR datetime <= $2`;
+    EVENT_SELECT = `SELECT ${values.join(', ')} 
+    FROM public.vevent WHERE datetime >= $1 OR datetime <= $2`;
 
     query = {
       text: EVENT_SELECT,
@@ -46,7 +80,8 @@ const SelectEvents = (searchParams, callback) => {
     const startDate = searchParams.get('startdate');
 
     // eslint-disable-next-line max-len
-    EVENT_SELECT = `SELECT ${values.join(', ')} FROM public.vevent WHERE datetime >= $1`;
+    EVENT_SELECT = `SELECT ${values.join(', ')} 
+    FROM public.vevent WHERE datetime >= $1`;
 
     query = {
       text: EVENT_SELECT,
@@ -57,7 +92,8 @@ const SelectEvents = (searchParams, callback) => {
     const Id = searchParams.get('id');
 
     // eslint-disable-next-line max-len
-    EVENT_SELECT = `SELECT ${values.join(', ')} FROM public.vevent WHERE id_event = $1`;
+    EVENT_SELECT = `SELECT ${values.join(', ')} 
+    FROM public.vevent WHERE id_event = $1`;
 
     query = {
       text: EVENT_SELECT,
@@ -68,7 +104,7 @@ const SelectEvents = (searchParams, callback) => {
   pool.query(query.text, query.value, callback);
 };
 
-module.exports = SelectEvents;
+module.exports = getEvents;
 
 
 

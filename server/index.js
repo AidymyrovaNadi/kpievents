@@ -3,7 +3,7 @@
 const fs = require('fs');
 const http = require('http');
 const path = require('path');
-const SelectEvents = require('./api');
+const getEvents = require('./api');
 
 const STATIC_PATH = path.join(process.cwd(), '/client/build');
 
@@ -47,7 +47,7 @@ http.createServer((req, res) => {
     console.log(paramsString);
     const searchParams = new URLSearchParams(paramsString);
 
-    SelectEvents(searchParams, (err, ress) => {
+    getEvents(searchParams, (err, ress) => {
       if (err) {
         return console.error(err.stack);
       } else {
@@ -63,6 +63,16 @@ http.createServer((req, res) => {
 
       }
     });
+
+
+    // postEvents(req, (err, result) => {
+    //   if (err) {
+    //     return console.error(err.stack);
+    //   } else {
+    //     res.end('ok');
+    //   }
+    // });
+
 
 
   } else if (fileExt === '') {
