@@ -33,6 +33,7 @@ const SelectEvents = (searchParams, callback) => {
   if (searchParams.has('enddate') && searchParams.has('startdate')) {
     const startDate = searchParams.get('startdate');
     const endDate = searchParams.get('enddate');
+
     // eslint-disable-next-line max-len
     EVENT_SELECT = `SELECT ${values.join(', ')} FROM public.vevent WHERE datetime >= $1 OR datetime <= $2`;
 

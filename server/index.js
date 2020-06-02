@@ -32,8 +32,6 @@ const serveFile = name => {
   return stream;
 };
 
-
-
 http.createServer((req, res) => {
   const query = req.url;
   const fileExt = path.extname(query).substring(1);
@@ -43,9 +41,10 @@ http.createServer((req, res) => {
   //If there non-file get call, send index, that cause client side routing
   //In other cases send file
 
-  if (fileExt === '' && /^\/api\/\D*$/.test(query)) {
+  if (fileExt === '' && /^\/api\/.*$/.test(query)) {
 
-    const paramsString = '/events&startdate=1999-01-08T04:05:06Z';
+    const paramsString = query.slice(4);
+    console.log(paramsString);
     const searchParams = new URLSearchParams(paramsString);
 
     SelectEvents(searchParams, (err, ress) => {
@@ -64,9 +63,6 @@ http.createServer((req, res) => {
 
       }
     });
-
-
-
 
 
   } else if (fileExt === '') {
