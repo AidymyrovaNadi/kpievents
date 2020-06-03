@@ -64,6 +64,7 @@ http.createServer((req, res) => {
       }
     });
 
+    //function for POST
 
     // postEvents(req, (err, result) => {
     //   if (err) {

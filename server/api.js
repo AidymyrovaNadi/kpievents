@@ -33,9 +33,6 @@ const postEvents = (req, callback) => {
   public.vevent(id_editor, id_writer, title, description, place, datetime) 
   VALUES($1, $2, $3, $4, $5, $6) RETURNING *`;
 
-  // eslint-disable-next-line max-len
-  //body = [4, 3, 'Poliana Dance', 'Party for true dancer', 'Poliana', '2020-08-30T18:15:00Z'];
-
   req.on('data', chunk => {
     body += chunk.toString(); // convert Buffer to string
   });
@@ -46,16 +43,6 @@ const postEvents = (req, callback) => {
   };
 
   pool.query(query.text, query.value, callback);
-
-  // (err, res) => {
-  //   if (err) {
-  //     return console.error(err.stack);
-  //   } else {
-  //     for (const row of res.rows) {
-  //       console.log(JSON.stringify(row));
-  //     }
-  //   }
-  // }
 };
 
 const getEvents = (searchParams, callback) => {
@@ -105,36 +92,3 @@ const getEvents = (searchParams, callback) => {
 };
 
 module.exports = getEvents;
-
-
-
-
-// const selectByDate = new Map();
-//
-// selectByDate.set('StartDate', startDate);
-// selectByDate.set('EndDate', endDate);
-// if (!selectByDate.has('EndDate')) {
-//   console.log('Beijing:', selectByDate.get('Beijing'));
-// }
-
-// const ApiRouting = req => {
-//
-//   const query = req.url.slice(4);
-//   // let result;
-//   //
-//   // pool.query(EVENT_SELECT, (err, res) => {
-//   //   if (err) {
-//   //     return console.error(err.stack);
-//   //   } else {
-//   //     result = [];
-//   //
-//   //     for (const row of res.rows) {
-//   //       result.push(row);
-//   //     }
-//   //
-//   //     console.log(result);
-//   //   }
-//   // });
-//   // return result;
-// };
-
