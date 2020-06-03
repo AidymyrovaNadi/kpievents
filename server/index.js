@@ -3,7 +3,7 @@
 const fs = require('fs');
 const http = require('http');
 const path = require('path');
-const getEvents = require('./api');
+const ApiRouting = require('./api');
 
 const STATIC_PATH = path.join(process.cwd(), '/client/build');
 
@@ -32,10 +32,39 @@ const serveFile = name => {
   return stream;
 };
 
-http.createServer((req, res) => {
-  const query = req.url;
-  const fileExt = path.extname(query).substring(1);
+const parseRequest = (req, callback) => {
+  const query = req.url.slice(4);
+  const path = query.split('&', 1).toString();
+  const queryParams = new URLSearchParams(query.replace(path, ''));
 
+  const params = {
+    path,
+    data: null,
+    method: req.method,
+  };
+
+  let data = '';
+
+  queryParams.forEach((value, key) => {
+    params[key] = value;
+  });
+
+  req.on('data', chunk => {
+    data += chunk;
+  });
+
+  req.on('end', () => {
+
+    if (data) params.data = JSON.parse(data);
+
+    callback(null, params);
+
+  });
+};
+
+http.createServer((request, response) => {
+  const query = request.url;
+  const fileExt = path.extname(query).substring(1);
 
   //If there an API call like '/api/*', goto api
   //If there non-file get call, send index, that cause client side routing
@@ -43,50 +72,59 @@ http.createServer((req, res) => {
 
   if (fileExt === '' && /^\/api\/.*$/.test(query)) {
 
-    const paramsString = query.slice(4);
-    console.log(paramsString);
-    const searchParams = new URLSearchParams(paramsString);
-
-    getEvents(searchParams, (err, ress) => {
-      if (err) {
-        return console.error(err.stack);
-      } else {
-        const result = [];
-
-        for (const row of ress.rows) {
-          result.push(row);
-        }
-
-        res.writeHead(200, { 'Content-Type': MIME_TYPES.json });
-        console.log(result);
-        res.end(JSON.stringify(result));
-
-      }
-    });
-
-    //function for POST
-
-    // postEvents(req, (err, result) => {
+    // getEvents(searchParams, (err, ress) => {
     //   if (err) {
     //     return console.error(err.stack);
     //   } else {
-    //     res.end('ok');
+    //     const result = [];
+    //
+    //     for (const row of ress.rows) {
+    //       result.push(row);
+    //     }
+    //
+    //     responce.writeHead(200, { 'Content-Type': MIME_TYPES.json });
+    //     console.log(result);
+    //     responce.end(JSON.stringify(result));
+    //
+    //   }
+    // });
+
+    parseRequest(request, (error, result) => {
+      if (error) {
+        console.log('error');
+      } else {
+        ApiRouting(result);
+        response.writeHead(200);
+        response.end(JSON.stringify(result));
+      }
+    });
+
+
+
+    //function for POST
+    // postEvents(request, (err, result) => {
+    //   if (err) {
+    //     return console.error(err.stack);
+    //   } else {
+    //     responce.end('ok');
     //   }
     // });
 
 
 
   } else if (fileExt === '') {
-    res.writeHead(200, { 'Content-Type': MIME_TYPES.html });
+    response.writeHead(200, { 'Content-Type': MIME_TYPES.html });
     const stream = serveFile('index.html');
 
-    if (stream) stream.pipe(res);
+    if (stream) stream.pipe(response);
 
   } else {
+
     const mimeType = MIME_TYPES[fileExt] || MIME_TYPES.plain;
-    res.writeHead(200, { 'Content-Type': mimeType });
+    response.writeHead(200, { 'Content-Type': mimeType });
+
     const stream = serveFile(query);
-    if (stream) stream.pipe(res);
+    if (stream) stream.pipe(response);
   }
 
 }).listen(process.env.PORT || 8000);

@@ -25,6 +25,13 @@ pool.connect((err, client, release) => {
 // eslint-disable-next-line max-len
 const values = ['id_event', 'id_editor', 'id_writer', 'title', 'description', 'place', 'datetime'];
 
+const methods = {
+  '/events': {
+    GET: () => { console.log('get'); },
+    POST: () => { console.log('post'); },
+  }
+};
+
 const postEvents = (req, callback) => {
   let body = '';
 
@@ -91,4 +98,24 @@ const getEvents = (searchParams, callback) => {
   pool.query(query.text, query.value, callback);
 };
 
-module.exports = getEvents;
+
+
+
+
+
+// const selectByDate = new Map();
+//
+// selectByDate.set('StartDate', startDate);
+// selectByDate.set('EndDate', endDate);
+// if (!selectByDate.has('EndDate')) {
+//   console.log('Beijing:', selectByDate.get('Beijing'));
+// }
+
+const ApiRouting = parsedReq => {
+
+  methods[parsedReq.path][parsedReq.method]();
+
+
+};
+
+module.exports = ApiRouting;

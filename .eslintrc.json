@@ -118,9 +118,6 @@
     "no-lonely-if": [
       "error"
     ],
-    "no-trailing-spaces": [
-      "error"
-    ],
     "no-unneeded-ternary": [
       "error"
     ],
