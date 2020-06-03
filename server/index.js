@@ -72,6 +72,7 @@ http.createServer((request, response) => {
   //In other cases send file
 
   if (fileExt === '' && /^\/api\/.*$/.test(query)) {
+
     parseRequest(request, (error, result) => {
       if (error) {
         console.log('error');
