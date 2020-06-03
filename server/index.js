@@ -56,6 +56,7 @@ const parseRequest = (req, callback) => {
   req.on('end', () => {
 
     if (data) params.data = JSON.parse(data);
+    console.log(params);
 
     callback(null, params);
 
@@ -71,46 +72,20 @@ http.createServer((request, response) => {
   //In other cases send file
 
   if (fileExt === '' && /^\/api\/.*$/.test(query)) {
-
-    // getEvents(searchParams, (err, ress) => {
-    //   if (err) {
-    //     return console.error(err.stack);
-    //   } else {
-    //     const result = [];
-    //
-    //     for (const row of ress.rows) {
-    //       result.push(row);
-    //     }
-    //
-    //     responce.writeHead(200, { 'Content-Type': MIME_TYPES.json });
-    //     console.log(result);
-    //     responce.end(JSON.stringify(result));
-    //
-    //   }
-    // });
-
     parseRequest(request, (error, result) => {
       if (error) {
         console.log('error');
       } else {
-        ApiRouting(result);
-        response.writeHead(200);
-        response.end(JSON.stringify(result));
+        ApiRouting(result, (err, res) => {
+          if (err) {
+            console.error(err.stack);
+          } else {
+            response.writeHead(200);
+            response.end(JSON.stringify(res.rows));
+          }
+        });
       }
     });
-
-
-
-    //function for POST
-    // postEvents(request, (err, result) => {
-    //   if (err) {
-    //     return console.error(err.stack);
-    //   } else {
-    //     responce.end('ok');
-    //   }
-    // });
-
-
 
   } else if (fileExt === '') {
     response.writeHead(200, { 'Content-Type': MIME_TYPES.html });
