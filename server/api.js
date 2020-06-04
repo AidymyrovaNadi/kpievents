@@ -87,6 +87,8 @@ const getEvents = (parsedReq, callback) => {
 
     const eventList = res.rows;
 
+    const arr = [[], [], [], [], [], [], []];
+
     eventList.sort((a, b) => {
       if (a.datetime > b.datetime) {
         return 1;
@@ -97,6 +99,19 @@ const getEvents = (parsedReq, callback) => {
       return 0;
     });
 
+    //04.06.20 00:00:00
+    //>
+    //04.06.20 3:53:00
+    //>
+    //05.06.20 00:00:00
+
+    eventList.forEach(elem => {
+
+      console.log(index);
+      arr[index].push(elem);
+    });
+
+    console.log(eventList);
     console.table(eventList);
 
     callback(err, eventList);
