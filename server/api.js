@@ -51,7 +51,7 @@ const getEvents = (parsedReq, callback) => {
 
     // eslint-disable-next-line max-len
     EVENT_SELECT = `SELECT ${values.join(', ')} 
-    FROM public.vevent WHERE datetime >= $1 OR datetime <= $2`;
+    FROM public.vevent WHERE datetime BETWEEN $1 AND $2`;
 
     query = {
       text: EVENT_SELECT,
@@ -70,7 +70,18 @@ const getEvents = (parsedReq, callback) => {
       value: [startDate],
     };
 
-  } else if (parsedReq.id !== undefined) {
+  } else if ((parsedReq.id !== undefined) && (parsedReq.endid === undefined)) {
+    const Id = parsedReq.id;
+
+    // eslint-disable-next-line max-len
+    EVENT_SELECT = `SELECT ${values.join(', ')} 
+    FROM public.vevent WHERE id_event = $1`;
+
+    query = {
+      text: EVENT_SELECT,
+      value: [Id],
+    };
+  } else if ((parsedReq.id !== undefined) && (parsedReq.endid !== undefined)) {
     const Id = parsedReq.id;
 
     // eslint-disable-next-line max-len
@@ -99,19 +110,25 @@ const getEvents = (parsedReq, callback) => {
       return 0;
     });
 
-    //04.06.20 00:00:00
-    //>
-    //04.06.20 3:53:00
-    //>
-    //05.06.20 00:00:00
-
     eventList.forEach(elem => {
-
-      console.log(index);
-      arr[index].push(elem);
+      const fromDate = new Date(elem.datetime);
+      fromDate.setHours(0);
+      fromDate.setMinutes(0);
+      fromDate.setSeconds(0);
+      const toDate = new Date(fromDate);
+      toDate.setDate((fromDate.getDate())+1);
+      const eventDay = elem.datetime.getDay();
+      //console.log(eventDay);
+      if ((elem.datetime > fromDate) && (elem.datetime < toDate) && (eventDay !== 0)) {
+        console.log(eventDay);
+        arr[eventDay - 1].push(elem);
+      } else if ((elem.datetime >= fromDate) && (eventDay === 0)) {
+        console.log(`Last day ${eventDay}`);
+        arr[6].push(elem);
+      }
     });
 
-    console.log(eventList);
+    console.log(arr);
     console.table(eventList);
 
     callback(err, eventList);
