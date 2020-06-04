@@ -51,7 +51,7 @@ const sortEvents = (err, res) => {
     const eventDay = elem.datetime.getDay();
 
     // eslint-disable-next-line max-len
-    if ((elem.datetime > fromDate) && (elem.datetime < toDate) && (!eventsArr.includes(elem.datetime))) {
+    if ((elem.datetime > fromDate) && (elem.datetime < toDate)) {
       if (eventDay !== 0) eventsArr[eventDay - 1].push(elem);
       else eventsArr[6].push(elem);
     }
