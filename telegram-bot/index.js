@@ -37,7 +37,7 @@ const parseEvents = data => {
     // eslint-disable-next-line max-len
     const eventDate = `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}, ${day.padStart(2, '0')}.${month.padStart(2, '0')}`;
     // eslint-disable-next-line max-len
-    message += `_${element.title}_\nО мероприятии: ${element.description}\nВремя: ${eventDate}\nМесто: ${element.place}\n\n`;
+    message += `_${element.title}_\n*О мероприятии:* ${element.description}\n*Время:* ${eventDate}\n*Место:* ${element.place}\n\n`;
   });
 
   return message;
@@ -50,7 +50,7 @@ bot.onText(/\/echo/, msg => {
 
   const chatId = msg.chat.id;
   //
-  getToday('http://localhost:8000/api/events&startdate=2020-08-30T00:00:00Z&enddate=2020-06-06T00:00:00Z')
+  getToday('http://localhost:8000/api/events&startdate=2020-06-01T00:00:00Z&enddate=2020-06-02T00:00:00Z')
     .then(data => {
       const message = parseEvents(data);
       console.log(message);
