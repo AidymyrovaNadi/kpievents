@@ -82,7 +82,7 @@ http.createServer((request, response) => {
             console.error(err.stack);
           } else {
             response.writeHead(200);
-            response.end(JSON.stringify(res.rows));
+            response.end(JSON.stringify(res));
           }
         });
       }

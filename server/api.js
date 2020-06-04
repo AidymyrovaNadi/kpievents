@@ -83,7 +83,24 @@ const getEvents = (parsedReq, callback) => {
     };
   }
 
-  pool.query(query.text, query.value, callback);
+  pool.query(query.text, query.value, (err, res) => {
+
+    const eventList = res.rows;
+
+    eventList.sort((a, b) => {
+      if (a.datetime > b.datetime) {
+        return 1;
+      }
+      if (a.datetime < b.datetime) {
+        return -1;
+      }
+      return 0;
+    });
+
+    console.table(eventList);
+
+    callback(err, eventList);
+  });
 };
 
 
