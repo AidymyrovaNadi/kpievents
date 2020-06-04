@@ -45,20 +45,20 @@ const sortEvents = (err, res) => {
     fromDate.setHours(0);
     fromDate.setMinutes(0);
     fromDate.setSeconds(0);
+
     const toDate = new Date(fromDate);
     toDate.setDate((fromDate.getDate()) + 1);
     const eventDay = elem.datetime.getDay();
-    console.log(eventDay);
+
     // eslint-disable-next-line max-len
     if ((elem.datetime > fromDate) && (elem.datetime < toDate) && (!eventsArr.includes(elem.datetime))) {
-      console.log(eventDay);
-      if (eventDay !== 0) eventsArr[eventDay].push(elem);
+      if (eventDay !== 0) eventsArr[eventDay - 1].push(elem);
       else eventsArr[6].push(elem);
     }
   });
 
   console.log(eventsArr);
-  console.table(eventList);
+  //console.table(eventList);
   // callback(err, eventList);
   return eventList;
 };
@@ -75,10 +75,7 @@ const postEvents = (parsedReq, callback) => {
     value: parsedReq.data,
   };
 
-  pool.query(query.text, query.value, (err, res) => {
-    const eventList = sortEvents(err, res);
-    callback(err, eventList);
-  });
+  pool.query(query.text, query.value, callback);
 };
 
 const getEvents = (parsedReq, callback) => {
