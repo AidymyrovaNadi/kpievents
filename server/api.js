@@ -25,6 +25,44 @@ pool.connect((err, client, release) => {
 // eslint-disable-next-line max-len
 const values = ['id_event', 'id_editor', 'id_writer', 'title', 'description', 'place', 'datetime'];
 
+
+const sortEvents = (err, res) => {
+  const eventList = res.rows;
+  const eventsArr = [[], [], [], [], [], [], []];
+
+  eventList.sort((a, b) => {
+    if (a.datetime > b.datetime) {
+      return 1;
+    }
+    if (a.datetime < b.datetime) {
+      return -1;
+    }
+    return 0;
+  });
+
+  eventList.forEach(elem => {
+    const fromDate = new Date(elem.datetime);
+    fromDate.setHours(0);
+    fromDate.setMinutes(0);
+    fromDate.setSeconds(0);
+    const toDate = new Date(fromDate);
+    toDate.setDate((fromDate.getDate()) + 1);
+    const eventDay = elem.datetime.getDay();
+    console.log(eventDay);
+    // eslint-disable-next-line max-len
+    if ((elem.datetime > fromDate) && (elem.datetime < toDate) && (!eventsArr.includes(elem.datetime))) {
+      console.log(eventDay);
+      if (eventDay !== 0) eventsArr[eventDay].push(elem);
+      else eventsArr[6].push(elem);
+    }
+  });
+
+  console.log(eventsArr);
+  console.table(eventList);
+  // callback(err, eventList);
+  return eventList;
+};
+
 const postEvents = (parsedReq, callback) => {
 
   // eslint-disable-next-line max-len
@@ -37,7 +75,10 @@ const postEvents = (parsedReq, callback) => {
     value: parsedReq.data,
   };
 
-  pool.query(query.text, query.value, callback);
+  pool.query(query.text, query.value, (err, res) => {
+    const eventList = sortEvents(err, res);
+    callback(err, eventList);
+  });
 };
 
 const getEvents = (parsedReq, callback) => {
@@ -95,42 +136,7 @@ const getEvents = (parsedReq, callback) => {
   }
 
   pool.query(query.text, query.value, (err, res) => {
-
-    const eventList = res.rows;
-
-    const arr = [[], [], [], [], [], [], []];
-
-    eventList.sort((a, b) => {
-      if (a.datetime > b.datetime) {
-        return 1;
-      }
-      if (a.datetime < b.datetime) {
-        return -1;
-      }
-      return 0;
-    });
-
-    eventList.forEach(elem => {
-      const fromDate = new Date(elem.datetime);
-      fromDate.setHours(0);
-      fromDate.setMinutes(0);
-      fromDate.setSeconds(0);
-      const toDate = new Date(fromDate);
-      toDate.setDate((fromDate.getDate())+1);
-      const eventDay = elem.datetime.getDay();
-      //console.log(eventDay);
-      if ((elem.datetime > fromDate) && (elem.datetime < toDate) && (eventDay !== 0)) {
-        console.log(eventDay);
-        arr[eventDay - 1].push(elem);
-      } else if ((elem.datetime >= fromDate) && (eventDay === 0)) {
-        console.log(`Last day ${eventDay}`);
-        arr[6].push(elem);
-      }
-    });
-
-    console.log(arr);
-    console.table(eventList);
-
+    const eventList = sortEvents(err, res);
     callback(err, eventList);
   });
 };
