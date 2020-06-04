@@ -26,17 +26,35 @@ const getToday = async (url = '') => {
 
 };
 
+const parseEvents = data => {
+  let message = '*Мероприятия на сегодня:*\n\n';
+  data.forEach(element => {
+    const date = new Date(element.datetime);
+    const day = date.getDate().toString();
+    const month = date.getMonth().toString();
+    const hours = date.getHours().toString();
+    const minutes = date.getMinutes().toString();
+    // eslint-disable-next-line max-len
+    const eventDate = `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}, ${day.padStart(2, '0')}.${month.padStart(2, '0')}`;
+    // eslint-disable-next-line max-len
+    message += `_${element.title}_\nО мероприятии: ${element.description}\nВремя: ${eventDate}\nМесто: ${element.place}\n\n`;
+  });
+
+  return message;
+};
+
 bot.onText(/\/echo/, msg => {
   // 'msg' is the received Message from Telegram
   // 'match' is the result of executing the regexp above on the text content
   // of the message
 
   const chatId = msg.chat.id;
-
-  getToday('http://localhost:8000/api/events&id=1')
+  //
+  getToday('http://localhost:8000/api/events&startdate=2020-08-30T00:00:00Z&enddate=2020-06-06T00:00:00Z')
     .then(data => {
-      console.log(data);
-      bot.sendMessage(chatId, JSON.stringify(data));
+      const message = parseEvents(data);
+      console.log(message);
+      bot.sendMessage(chatId, message, { parse_mode: 'Markdown' });
     });
 
 });
