@@ -3,7 +3,7 @@
 const fs = require('fs');
 const http = require('http');
 const path = require('path');
-const ApiRouting = require('./api');
+const routeApi = require('./api');
 
 const STATIC_PATH = path.join(process.cwd(), '/client/build');
 
@@ -77,7 +77,7 @@ http.createServer((request, response) => {
       if (error) {
         console.log('error');
       } else {
-        ApiRouting(result, (err, res) => {
+        routeApi(result, (err, res) => {
           if (err) {
             console.error(err.stack);
           } else {

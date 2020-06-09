@@ -49,8 +49,8 @@ bot.onText(/\/echo/, msg => {
   // of the message
 
   const chatId = msg.chat.id;
-  //
-  getToday('http://localhost:8000/api/events&startdate=2020-06-01T00:00:00Z&enddate=2020-06-02T00:00:00Z')
+
+  getToday('http://kpievents.herokuapp.com/api/events&startdate=2020-06-01T00:00:00Z')
     .then(data => {
       const message = parseEvents(data);
       console.log(message);
