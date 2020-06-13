@@ -24,39 +24,46 @@ pool.connect((err, client, release) => {
 
 // eslint-disable-next-line max-len
 const values = ['id_event', 'id_editor', 'id_writer', 'title', 'description', 'place', 'datetime'];
-const eventsArr = [[], [], [], [], [], [], []];
+
 
 const sortEvents = (err, res) => {
   const eventList = res.rows;
+  const eventsArr = [];
+  let bufferArr = [];
 
-  // исправить
+  const fromDate = new Date(eventList[0].datetime);
+  fromDate.setHours(0);
+  fromDate.setMinutes(0);
+  fromDate.setSeconds(0);
+
   eventList.forEach(elem => {
-    const fromDate = new Date(elem.datetime);
-    fromDate.setHours(0);
-    fromDate.setMinutes(0);
-    fromDate.setSeconds(0);
 
     const toDate = new Date(fromDate);
     toDate.setDate((fromDate.getDate()) + 1);
-    const eventDay = elem.datetime.getDay();
+
+    console.log((elem.datetime >= fromDate) && (elem.datetime < toDate));
+    console.log(elem.datetime);
 
     // eslint-disable-next-line max-len
-    if ((elem.datetime > fromDate) && (elem.datetime < toDate)) {
-      if (eventDay !== 0) eventsArr[eventDay - 1].push(elem);
-      else eventsArr[6].push(elem);
+    if ((elem.datetime >= fromDate) && (elem.datetime <= toDate)) {
+      bufferArr.push(elem);
+    } else {
+      eventsArr.push(bufferArr);
+      bufferArr = [];
+      fromDate.setDate((fromDate.getDate()) + 1);
+      bufferArr.push(elem);
     }
   });
 
-  console.log(eventsArr);
-  //console.table(eventList);
-  // callback(err, eventList);
+  eventsArr.push(bufferArr);
+
   return eventsArr;
 };
 
 const postEvents = (parsedReq, callback) => {
   let error = null;
   if (parsedReq.data === null) {
-    error = new Error('Дай данных, брат.');
+    error = new Error('No data to insert.');
     callback(error, null);
   } else {
     // eslint-disable-next-line max-len
@@ -79,12 +86,10 @@ const getEvents = (parsedReq, callback) => {
   let query;
   let error = null;
 
-  // eslint-disable-next-line max-len
-  if ((parsedReq.enddate !== undefined) && (parsedReq.startdate !== undefined)) {
+  if ((parsedReq.enddate) && (parsedReq.startdate)) {
     const startDate = parsedReq.startdate;
     const endDate = parsedReq.enddate;
 
-    // eslint-disable-next-line max-len
     EVENT_SELECT = `SELECT ${values.join(', ')} 
     FROM public.vevent WHERE datetime BETWEEN $1 AND $2 ORDER BY datetime`;
 
@@ -92,8 +97,13 @@ const getEvents = (parsedReq, callback) => {
       text: EVENT_SELECT,
       value: [startDate, endDate],
     };
-    // eslint-disable-next-line max-len
-  } else if ((parsedReq.enddate === undefined) && (parsedReq.startdate !== undefined)) {
+
+    pool.query(query.text, query.value, (err, res) => {
+      const eventList = sortEvents(err, res);
+      callback(err, eventList);
+    });
+
+  } else if (!(parsedReq.enddate) && (parsedReq.startdate)) {
     const startDate = new Date(parsedReq.startdate);
     startDate.setHours(0);
     startDate.setMinutes(0);
@@ -102,51 +112,77 @@ const getEvents = (parsedReq, callback) => {
     const nextDate = new Date(startDate);
     nextDate.setDate((startDate.getDate()) + 1);
 
-    console.log(startDate.toString());
-    console.log(nextDate.toString());
-
-    // eslint-disable-next-line max-len
     EVENT_SELECT = `SELECT ${values.join(', ')}
-    FROM public.vevent WHERE datetime = $1`;
+    FROM public.vevent WHERE datetime BETWEEN $1 AND $2 ORDER BY datetime`;
 
     query = {
       text: EVENT_SELECT,
       value: [startDate, nextDate],
     };
 
-  } else if (parsedReq.id !== undefined) {
+    pool.query(query.text, query.value, (err, res) => {
+      if (err) {
+        console.error(err);
+      } else {
+        const eventsArr = [];
+        for (const row of res.rows) {
+          eventsArr.push(row);
+        }
+        callback(err, eventsArr);
+      }
+    });
+
+  } else if (parsedReq.id) {
     const Id = parsedReq.id;
 
-    // eslint-disable-next-line max-len
     EVENT_SELECT = `SELECT ${values.join(', ')} 
-    FROM public.vevent WHERE id_event = $1 ORDER BY datetime`;
+    FROM public.vevent WHERE id_event = $1`;
 
     query = {
       text: EVENT_SELECT,
       value: [Id],
     };
-    // eslint-disable-next-line max-len
-  } else if ((parsedReq.startid !== undefined) && (parsedReq.endid !== undefined)) {
+
+    pool.query(query.text, query.value, (err, res) => {
+      if (err) {
+        console.error(err);
+      } else {
+        const eventsArr = [];
+        for (const row of res.rows) {
+          eventsArr.push(row);
+        }
+        callback(err, eventsArr);
+      }
+    });
+
+  } else if ((parsedReq.startid) && (parsedReq.endid)) {
     const startId = parsedReq.startid;
     const endId = parsedReq.endid;
 
-    // eslint-disable-next-line max-len
     EVENT_SELECT = `SELECT ${values.join(', ')} 
-    FROM public.vevent WHERE id_event BETWEEN $1 AND $2 ORDER BY datetime`;
+    FROM public.vevent WHERE id_event BETWEEN $1 AND $2 ORDER BY id_event`;
 
     query = {
       text: EVENT_SELECT,
       value: [startId, endId],
     };
+
+    pool.query(query.text, query.value, (err, res) => {
+      if (err) {
+        console.error(err);
+      } else {
+        const eventsArr = [];
+        for (const row of res.rows) {
+          eventsArr.push(row);
+        }
+        callback(err, eventsArr);
+      }
+    });
+
   } else {
     error = new Error('Incorrect parameters. Try again.');
     callback(error, null);
   }
-
-  pool.query(query.text, query.value, (err, res) => {
-    const eventList = sortEvents(err, res);
-    callback(err, eventList);
-  });
 };
 
-module.exports = { postEvents, getEvents, eventsArr };
+module.exports = { postEvents, getEvents };
