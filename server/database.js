@@ -93,8 +93,8 @@ const getEvents = (parsedReq, callback) => {
       value: [startDate, endDate],
     };
     // eslint-disable-next-line max-len
-  } else if ((parsedReq.startdate === undefined) && (parsedReq.endid !== undefined)) {
-    const startDate = parsedReq.startdate;
+  } else if ((parsedReq.enddate === undefined) && (parsedReq.startdate !== undefined)) {
+    const startDate = new Date(parsedReq.startdate);
     startDate.setHours(0);
     startDate.setMinutes(0);
     startDate.setSeconds(0);
@@ -102,16 +102,19 @@ const getEvents = (parsedReq, callback) => {
     const nextDate = new Date(startDate);
     nextDate.setDate((startDate.getDate()) + 1);
 
+    console.log(startDate.toString());
+    console.log(nextDate.toString());
+
     // eslint-disable-next-line max-len
-    EVENT_SELECT = `SELECT ${values.join(', ')} 
-    FROM public.vevent WHERE datetime WHERE $1 AND $2 ORDER BY datetime`;
+    EVENT_SELECT = `SELECT ${values.join(', ')}
+    FROM public.vevent WHERE datetime = $1`;
 
     query = {
       text: EVENT_SELECT,
       value: [startDate, nextDate],
     };
 
-  } else if ((parsedReq.id !== undefined) && (parsedReq.endid === undefined)) {
+  } else if (parsedReq.id !== undefined) {
     const Id = parsedReq.id;
 
     // eslint-disable-next-line max-len
@@ -122,6 +125,7 @@ const getEvents = (parsedReq, callback) => {
       text: EVENT_SELECT,
       value: [Id],
     };
+    // eslint-disable-next-line max-len
   } else if ((parsedReq.startid !== undefined) && (parsedReq.endid !== undefined)) {
     const startId = parsedReq.startid;
     const endId = parsedReq.endid;
