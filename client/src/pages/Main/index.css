@@ -4,6 +4,7 @@
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-evenly;
+    margin-top: 40px;
 }
 .column {
     width: 30%;
