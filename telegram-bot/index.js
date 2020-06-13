@@ -9,9 +9,14 @@ const token = process.env.BOT_TOKEN;
 
 const bot = new TelegramBot(token, { polling: true });
 
-const getToday = async (url = '') => {
+const getToday = async () => {
 
-  const response = await fetch(url, {
+  const todayDate = new Date();
+  todayDate.setHours(0);
+  todayDate.setMinutes(0);
+  todayDate.setSeconds(0);
+
+  const response = await fetch(`http://localhost:8000/api/events&startdate=${todayDate}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
@@ -20,7 +25,6 @@ const getToday = async (url = '') => {
     cache: 'no-cache',
     referrerPolicy: 'no-referrer',
     credentials: 'same-origin',
-
   });
   return await response.json();
 
@@ -31,7 +35,7 @@ const parseEvents = data => {
   data.forEach(element => {
     const date = new Date(element.datetime);
     const day = date.getDate().toString();
-    const month = date.getMonth().toString();
+    const month = (date.getMonth() + 1).toString();
     const hours = date.getHours().toString();
     const minutes = date.getMinutes().toString();
     // eslint-disable-next-line max-len
@@ -50,7 +54,7 @@ bot.onText(/\/echo/, msg => {
 
   const chatId = msg.chat.id;
 
-  getToday('http://kpievents.herokuapp.com/api/events&startdate=2020-06-01T00:00:00Z')
+  getToday()
     .then(data => {
       const message = parseEvents(data);
       console.log(message);
