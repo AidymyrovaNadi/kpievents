@@ -9,14 +9,21 @@ const token = process.env.BOT_TOKEN;
 
 const bot = new TelegramBot(token, { polling: true });
 
+const id = {
+  catskin:  177498086,
+  yourhope: 376946651,
+};
+
 const getToday = async () => {
 
   const todayDate = new Date();
-  todayDate.setHours(0);
-  todayDate.setMinutes(0);
-  todayDate.setSeconds(0);
+  todayDate.setUTCHours(0);
+  todayDate.setUTCMinutes(0);
+  todayDate.setUTCSeconds(0);
 
-  const response = await fetch(`http://localhost:8000/api/events&startdate=${todayDate}`, {
+
+  console.log(`http://localhost:8000/api/events&startdate=${todayDate.toISOString()}`);
+  const response = await fetch(`http://localhost:8000/api/events&startdate=${todayDate.toISOString()}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
@@ -55,6 +62,7 @@ bot.onText(/\/echo/, msg => {
   const chatId = msg.chat.id;
 
   getToday()
+
     .then(data => {
       const message = parseEvents(data);
       console.log(message);

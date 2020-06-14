@@ -71,7 +71,7 @@ http.createServer((request, response) => {
   //If there non-file get call, send index, that cause client side routing
   //In other cases send file
 
-  if (fileExt === '' && /^\/api\/.*$/.test(query)) {
+  if (/^\/api\/.*$/.test(query)) {
 
     parseRequest(request, (error, result) => {
       if (error) {

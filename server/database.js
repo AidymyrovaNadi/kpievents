@@ -69,7 +69,7 @@ const postEvents = (parsedReq, callback) => {
     // eslint-disable-next-line max-len
     const EVENT_INSERT = `INSERT INTO 
     public.vevent(id_editor, id_writer, title, description, place, datetime) 
-    VALUES($1, $2, $3, $4, $5, $6) RETURNING * ORDER BY datetime`;
+    VALUES($1, $2, $3, $4, $5, $6) RETURNING *`;
 
     const query = {
       text: EVENT_INSERT,
@@ -105,9 +105,9 @@ const getEvents = (parsedReq, callback) => {
 
   } else if (!(parsedReq.enddate) && (parsedReq.startdate)) {
     const startDate = new Date(parsedReq.startdate);
-    startDate.setHours(0);
-    startDate.setMinutes(0);
-    startDate.setSeconds(0);
+    startDate.setUTCHours(0);
+    startDate.setUTCMinutes(0);
+    startDate.setUTCSeconds(0);
 
     const nextDate = new Date(startDate);
     nextDate.setDate((startDate.getDate()) + 1);
