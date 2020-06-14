@@ -15,6 +15,12 @@ function Main() {
       <div className='column'>
         <DayBlock />
       </div>
+      <div className='column'>
+        <DayBlock />
+      </div>
+      <div className='column'>
+        <DayBlock />
+      </div>
     </div>
   );
 }
