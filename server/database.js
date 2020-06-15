@@ -70,7 +70,14 @@ const postEvents = (parsedReq, callback) => {
       value: parsedReq.data,
     };
 
-    pool.query(query.text, query.value, callback);
+    pool.query(query.text, query.value, (err, res) => {
+      if (err) {
+        console.error(err);
+      } else {
+        res = 'Success!';
+        callback(err, res);
+      }
+    });
   }
 };
 
