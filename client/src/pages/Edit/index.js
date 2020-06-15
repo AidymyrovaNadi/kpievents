@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './index.css';
 import { Link } from 'react-router-dom';
 import DayBlock from '../../components/DayBlock';
 
+function Edit() {
 
+  const [event, setEvent] = useState()
 
-function Edit(props) {
   return (
     <div className="main_edit">
       <div className="event-add">
@@ -26,7 +27,7 @@ function Edit(props) {
       </div>
       
       <div className="event-preview">
-        <DayBlock info={ props[0] }/>
+        <DayBlock />
         <p className="event-input__additional-info" style={{textAlign: "center"}}>Щоб розгорнути подію <b>натисніть</b> на неї.</p>
       </div>
     </div>
