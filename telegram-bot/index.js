@@ -10,7 +10,7 @@ const token = process.env.BOT_TOKEN;
 const bot = new TelegramBot(token, { polling: true });
 
 const id = {
-  kpievents: 1331207388,
+  kpievents: '@truekpievents',
   catskin:  177498086,
   yourhope: 376946651,
 };
@@ -38,43 +38,14 @@ const sendMe = text => {
 
 const sendTodayEvents = () => {
   
-  const receiver = id.yourhope;
+  const receiver = id.kpievents;
 
   getToday()
-
     .then(data => {
       const message = parseEvents(data);
       console.log(message);
       bot.sendMessage(receiver, message, { parse_mode: 'Markdown' });
-
-      const hourToSend = 16;
-
-      const timeToRepeat = new Date();
-      // проверка if-else на 0-23
-      if (timeToRepeat.getHours() <= hourToSend) {
-        timeToRepeat.setHours(hourToSend, 35);
-      } else {
-        timeToRepeat.setHours(hourToSend, 35);
-        timeToRepeat.setDate(timeToRepeat.getDate() + 1);
-      }
-
-      console.log(timeToRepeat);
-
-      const delay = timeToRepeat.getTime() - new Date().getTime();
-      // const delay = 1000;
-      sendMe(timeToRepeat);
-
-      console.log(delay);
-
-      setTimeout(() => {
-        sendTodayEvents();
-
-        setInterval(() => { sendTodayEvents(); }, 60000);
-      }, delay);
-      //setTimeout с delay, setInterval - 24h
-
     });
-  
 };
 
 const setAdminCommand = (command, callback) => {
@@ -89,7 +60,32 @@ const setAdminCommand = (command, callback) => {
 };
 
 setAdminCommand('sendEvents', () => {
-  sendTodayEvents();
+
+  const HOUR_TO_SEND = 12;
+  const MSEC_INTERVAL = 24 * 60 * 60 * 1000;
+
+  const timeToSend = new Date();
+
+  if (timeToSend.getHours() < HOUR_TO_SEND) {
+    timeToSend.setHours(HOUR_TO_SEND, 0, 0);
+  } else {
+    timeToSend.setHours(HOUR_TO_SEND, 0, 0);
+    timeToSend.setDate(timeToSend.getDate() + 1);
+  }
+
+  const timeLeftToSend = timeToSend.getTime() - new Date().getTime();
+  sendMe(timeToSend);
+
+  console.log(timeToSend);
+  console.log(timeLeftToSend);
+
+  setTimeout(() => {
+    sendTodayEvents();
+    setInterval(() => {
+      sendTodayEvents();
+    }, MSEC_INTERVAL);
+  }, timeLeftToSend);
+
 });
 
 
@@ -114,9 +110,9 @@ bot.onText(/\/today/, msg => {
 
   const chatId = msg.chat.id;
 
-
+  console.log(msg.chat.id);
 
   // send back the matched "whatever" to the chat
-  bot.sendMessage(chatId, 'kekeke');
+  bot.sendMessage(chatId, msg.chat.id);
 });
 
