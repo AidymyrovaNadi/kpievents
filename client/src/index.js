@@ -7,6 +7,7 @@ import './index.css';
 import Logo from '../src/img/logo.png';
 
 import Main from './pages/Main';
+import Edit from './pages/Edit';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -16,6 +17,7 @@ ReactDOM.render(
     <div className='content'>
       <Router>
         <Route path='/' exact component={Main}/>
+        <Route path='/edit' exact component={Edit}/>
       </Router>
     </div>
   </React.StrictMode>,

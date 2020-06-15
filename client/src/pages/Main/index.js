@@ -7,8 +7,6 @@ import useFetchEvents from '../../hooks/useFetchEvents';
 function Main() {
 
   const events = useFetchEvents()
-
-
   return (
     <div className="main">
       <div className='column'>
