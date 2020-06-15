@@ -3,31 +3,16 @@
 const TelegramBot = require('node-telegram-bot-api');
 
 require('dotenv').config();
-const fetch = require('node-fetch');
+const getToday = require('./getEvents');
 
 const token = process.env.BOT_TOKEN;
 
 const bot = new TelegramBot(token, { polling: true });
 
-const getToday = async () => {
-
-  const todayDate = new Date();
-  todayDate.setHours(0);
-  todayDate.setMinutes(0);
-  todayDate.setSeconds(0);
-
-  const response = await fetch(`http://localhost:8000/api/events&startdate=${todayDate}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    mode: 'cors',
-    cache: 'no-cache',
-    referrerPolicy: 'no-referrer',
-    credentials: 'same-origin',
-  });
-  return await response.json();
-
+const id = {
+  kpievents: '@truekpievents',
+  catskin:  177498086,
+  yourhope: 376946651,
 };
 
 const parseEvents = data => {
@@ -47,6 +32,63 @@ const parseEvents = data => {
   return message;
 };
 
+const sendMe = text => {
+  bot.sendMessage(id.yourhope, text);
+};
+
+const sendTodayEvents = () => {
+  
+  const receiver = id.kpievents;
+
+  getToday()
+    .then(data => {
+      const message = parseEvents(data);
+      console.log(message);
+      bot.sendMessage(receiver, message, { parse_mode: 'Markdown' });
+    });
+};
+
+const setAdminCommand = (command, callback) => {
+  const regexp = new RegExp('/' + command);
+  bot.onText(regexp, (msg, match) => {
+    if (msg.from.id === id.catskin || id.yourhope) {
+      callback(msg, match);
+    } else {
+      bot.sendMessage(msg.chat.id, 'А?');
+    }
+  });
+};
+
+setAdminCommand('sendEvents', () => {
+
+  const HOUR_TO_SEND = 12;
+  const MSEC_INTERVAL = 24 * 60 * 60 * 1000;
+
+  const timeToSend = new Date();
+
+  if (timeToSend.getHours() < HOUR_TO_SEND) {
+    timeToSend.setHours(HOUR_TO_SEND, 0, 0);
+  } else {
+    timeToSend.setHours(HOUR_TO_SEND, 0, 0);
+    timeToSend.setDate(timeToSend.getDate() + 1);
+  }
+
+  const timeLeftToSend = timeToSend.getTime() - new Date().getTime();
+  sendMe(timeToSend);
+
+  console.log(timeToSend);
+  console.log(timeLeftToSend);
+
+  setTimeout(() => {
+    sendTodayEvents();
+    setInterval(() => {
+      sendTodayEvents();
+    }, MSEC_INTERVAL);
+  }, timeLeftToSend);
+
+});
+
+
 bot.onText(/\/echo/, msg => {
   // 'msg' is the received Message from Telegram
   // 'match' is the result of executing the regexp above on the text content
@@ -55,6 +97,7 @@ bot.onText(/\/echo/, msg => {
   const chatId = msg.chat.id;
 
   getToday()
+
     .then(data => {
       const message = parseEvents(data);
       console.log(message);
@@ -67,8 +110,9 @@ bot.onText(/\/today/, msg => {
 
   const chatId = msg.chat.id;
 
-
+  console.log(msg.chat.id);
 
   // send back the matched "whatever" to the chat
-  bot.sendMessage(chatId, 'kekeke');
+  bot.sendMessage(chatId, msg.chat.id);
 });
+

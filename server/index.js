@@ -58,7 +58,7 @@ const parseRequest = (req, callback) => {
     if (data) params.data = JSON.parse(data);
     console.log(params);
 
-    callback(null, params);
+    callback(params);
 
   });
 };
@@ -71,27 +71,38 @@ http.createServer((request, response) => {
   //If there non-file get call, send index, that cause client side routing
   //In other cases send file
 
-  if (fileExt === '' && /^\/api\/.*$/.test(query)) {
+  if (/^\/api\/.*$/.test(query)) {
 
-    parseRequest(request, (error, result) => {
-      if (error) {
-        console.log('error');
-      } else {
-        routeApi(result, (err, res) => {
-          if (err) {
-            console.error(err.stack);
-          } else {
-            response.writeHead(200);
-            response.end(JSON.stringify(res));
-          }
-        });
-      }
+    parseRequest(request, result => {
+
+      routeApi(result, (err, res) => {
+        if (err) {
+          console.log(err.message);
+
+          response.writeHead(501);
+          response.end(err.message);
+
+        } else {
+
+          response.writeHead(200, {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Request-Method': '*',
+            'Access-Control-Allow-Methods': 'OPTIONS, GET',
+            'Access-Control-Allow-Headers': '*',
+          });
+
+          response.end(JSON.stringify(res));
+
+        }
+      });
+
     });
 
   } else if (fileExt === '') {
-    response.writeHead(200, { 'Content-Type': MIME_TYPES.html });
-    const stream = serveFile('index.html');
 
+    response.writeHead(200, { 'Content-Type': MIME_TYPES.html });
+
+    const stream = serveFile('index.html');
     if (stream) stream.pipe(response);
 
   } else {
@@ -101,6 +112,7 @@ http.createServer((request, response) => {
 
     const stream = serveFile(query);
     if (stream) stream.pipe(response);
+
   }
 
 }).listen(process.env.PORT || 8000);

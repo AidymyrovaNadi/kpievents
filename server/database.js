@@ -41,21 +41,15 @@ const sortEvents = (err, res) => {
     const toDate = new Date(fromDate);
     toDate.setDate((fromDate.getDate()) + 1);
 
-    console.log((elem.datetime >= fromDate) && (elem.datetime < toDate));
-    console.log(elem.datetime);
-
-    // eslint-disable-next-line max-len
     if ((elem.datetime >= fromDate) && (elem.datetime <= toDate)) {
       bufferArr.push(elem);
     } else {
       eventsArr.push(bufferArr);
       bufferArr = [];
-      fromDate.setDate((fromDate.getDate()) + 1);
+      fromDate.setDate(elem.datetime.getDate());
       bufferArr.push(elem);
     }
   });
-
-  eventsArr.push(bufferArr);
 
   return eventsArr;
 };
@@ -69,14 +63,21 @@ const postEvents = (parsedReq, callback) => {
     // eslint-disable-next-line max-len
     const EVENT_INSERT = `INSERT INTO 
     public.vevent(id_editor, id_writer, title, description, place, datetime) 
-    VALUES($1, $2, $3, $4, $5, $6) RETURNING * ORDER BY datetime`;
+    VALUES($1, $2, $3, $4, $5, $6) RETURNING *`;
 
     const query = {
       text: EVENT_INSERT,
       value: parsedReq.data,
     };
 
-    pool.query(query.text, query.value, callback);
+    pool.query(query.text, query.value, (err, res) => {
+      if (err) {
+        console.error(err);
+      } else {
+        res = 'Success!';
+        callback(err, res);
+      }
+    });
   }
 };
 
@@ -105,9 +106,9 @@ const getEvents = (parsedReq, callback) => {
 
   } else if (!(parsedReq.enddate) && (parsedReq.startdate)) {
     const startDate = new Date(parsedReq.startdate);
-    startDate.setHours(0);
-    startDate.setMinutes(0);
-    startDate.setSeconds(0);
+    startDate.setUTCHours(0);
+    startDate.setUTCMinutes(0);
+    startDate.setUTCSeconds(0);
 
     const nextDate = new Date(startDate);
     nextDate.setDate((startDate.getDate()) + 1);
