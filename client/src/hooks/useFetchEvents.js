@@ -11,12 +11,13 @@ const useFetchEvents = () => {
   const endDate = new Date(startDate);
   endDate.setDate(endDate.getDate() + 7);
 
-  const url = `http://localhost:8000/api/events&startdate=${startDate.toISOString()}`;
+  const url = `http://localhost:8000/api/events&startdate=${startDate.toISOString()}&enddate=${endDate.toISOString()}`;
+
   const options = {
     method: 'GET',
-    // headers: {
-    //   'Content-Type': 'application/json'
-    // },
+    headers: {
+      'Content-Type': 'application/json'
+    },
     mode: 'cors',
     cache: 'no-cache',
     referrerPolicy: 'no-referrer',
