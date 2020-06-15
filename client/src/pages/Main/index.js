@@ -3,7 +3,7 @@ import './index.css';
 import { Link } from 'react-router-dom';
 import DayBlock from '../../components/DayBlock';
 
-function Main() {
+function Main(props) {
   return (
     <div className="main">
       <div className='column'>
