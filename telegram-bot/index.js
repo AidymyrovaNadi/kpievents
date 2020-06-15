@@ -3,38 +3,16 @@
 const TelegramBot = require('node-telegram-bot-api');
 
 require('dotenv').config();
-const fetch = require('node-fetch');
+const getToday = require('./getEvents');
 
 const token = process.env.BOT_TOKEN;
 
 const bot = new TelegramBot(token, { polling: true });
 
 const id = {
+  kpievents: 1331207388,
   catskin:  177498086,
   yourhope: 376946651,
-};
-
-const getToday = async () => {
-
-  const todayDate = new Date();
-  todayDate.setUTCHours(0);
-  todayDate.setUTCMinutes(0);
-  todayDate.setUTCSeconds(0);
-
-
-  console.log(`http://localhost:8000/api/events&startdate=${todayDate.toISOString()}`);
-  const response = await fetch(`http://localhost:8000/api/events&startdate=${todayDate.toISOString()}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    mode: 'cors',
-    cache: 'no-cache',
-    referrerPolicy: 'no-referrer',
-    credentials: 'same-origin',
-  });
-  return await response.json();
-
 };
 
 const parseEvents = data => {
@@ -53,6 +31,67 @@ const parseEvents = data => {
 
   return message;
 };
+
+const sendMe = text => {
+  bot.sendMessage(id.yourhope, text);
+};
+
+const sendTodayEvents = () => {
+  
+  const receiver = id.yourhope;
+
+  getToday()
+
+    .then(data => {
+      const message = parseEvents(data);
+      console.log(message);
+      bot.sendMessage(receiver, message, { parse_mode: 'Markdown' });
+
+      const hourToSend = 16;
+
+      const timeToRepeat = new Date();
+      // проверка if-else на 0-23
+      if (timeToRepeat.getHours() <= hourToSend) {
+        timeToRepeat.setHours(hourToSend, 35);
+      } else {
+        timeToRepeat.setHours(hourToSend, 35);
+        timeToRepeat.setDate(timeToRepeat.getDate() + 1);
+      }
+
+      console.log(timeToRepeat);
+
+      const delay = timeToRepeat.getTime() - new Date().getTime();
+      // const delay = 1000;
+      sendMe(timeToRepeat);
+
+      console.log(delay);
+
+      setTimeout(() => {
+        sendTodayEvents();
+
+        setInterval(() => { sendTodayEvents(); }, 60000);
+      }, delay);
+      //setTimeout с delay, setInterval - 24h
+
+    });
+  
+};
+
+const setAdminCommand = (command, callback) => {
+  const regexp = new RegExp('/' + command);
+  bot.onText(regexp, (msg, match) => {
+    if (msg.from.id === id.catskin || id.yourhope) {
+      callback(msg, match);
+    } else {
+      bot.sendMessage(msg.chat.id, 'А?');
+    }
+  });
+};
+
+setAdminCommand('sendEvents', () => {
+  sendTodayEvents();
+});
+
 
 bot.onText(/\/echo/, msg => {
   // 'msg' is the received Message from Telegram
@@ -80,3 +119,4 @@ bot.onText(/\/today/, msg => {
   // send back the matched "whatever" to the chat
   bot.sendMessage(chatId, 'kekeke');
 });
+
