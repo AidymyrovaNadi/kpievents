@@ -33,18 +33,19 @@ const parseEvents = data => {
 };
 
 const sendMe = text => {
-  bot.sendMessage(id.yourhope, text);
+  bot.sendMessage(id.catskin, text);
 };
 
 const sendTodayEvents = () => {
-  
-  const receiver = id.yourhope;
+
+  const receiver = id.catskin;
 
   getToday()
 
     .then(data => {
       const message = parseEvents(data);
       console.log(message);
+
       bot.sendMessage(receiver, message, { parse_mode: 'Markdown' });
 
       const hourToSend = 16;
@@ -61,6 +62,7 @@ const sendTodayEvents = () => {
       console.log(timeToRepeat);
 
       const delay = timeToRepeat.getTime() - new Date().getTime();
+      console.log(delay);
       // const delay = 1000;
       sendMe(timeToRepeat);
 
@@ -74,7 +76,7 @@ const sendTodayEvents = () => {
       //setTimeout с delay, setInterval - 24h
 
     });
-  
+
 };
 
 const setAdminCommand = (command, callback) => {
@@ -89,6 +91,7 @@ const setAdminCommand = (command, callback) => {
 };
 
 setAdminCommand('sendEvents', () => {
+
   sendTodayEvents();
 });
 

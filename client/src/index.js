@@ -7,7 +7,6 @@ import './index.css';
 import Logo from '../src/img/logo.png';
 
 import Main from './pages/Main';
-import App2 from './App2';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -17,7 +16,6 @@ ReactDOM.render(
     <div className='content'>
       <Router>
         <Route path='/' exact component={Main}/>
-        <Route path='/sec' exact component={App2}/>
       </Router>
     </div>
   </React.StrictMode>,

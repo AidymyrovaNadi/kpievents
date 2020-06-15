@@ -11,6 +11,10 @@ const methods = {
 
 const routeApi = (parsedReq, callback) => {
 
+  console.table(
+    parsedReq
+  );
+
   methods[parsedReq.path][parsedReq.method](parsedReq, callback);
 
 };
