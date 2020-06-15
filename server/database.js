@@ -41,10 +41,6 @@ const sortEvents = (err, res) => {
     const toDate = new Date(fromDate);
     toDate.setDate((fromDate.getDate()) + 1);
 
-    console.log((elem.datetime >= fromDate) && (elem.datetime < toDate));
-    console.log(elem.datetime.toISOString());
-
-    // eslint-disable-next-line max-len
     if ((elem.datetime >= fromDate) && (elem.datetime <= toDate)) {
       bufferArr.push(elem);
     } else {
@@ -54,8 +50,6 @@ const sortEvents = (err, res) => {
       bufferArr.push(elem);
     }
   });
-
-  eventsArr.push(bufferArr);
 
   return eventsArr;
 };

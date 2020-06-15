@@ -81,7 +81,9 @@ http.createServer((request, response) => {
           if (err) {
             console.error(err.stack);
           } else {
-            response.writeHead(200);
+            response.writeHead(200, {
+              'Access-Control-Allow-Origin': '*',
+            });
             response.end(JSON.stringify(res));
           }
         });
