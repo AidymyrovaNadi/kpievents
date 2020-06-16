@@ -42,17 +42,6 @@
     font-family: 'Roboto', sans-serif;
 }
 
-.event-input_date {
-    width: 90px;
-}
-
-.event-input_month {
-    width: 110px;
-}
-
-.event-input_time{
-    width: 76px;
-}
 
 .event-input_name{
     width: 296px;
@@ -112,4 +101,12 @@
 .event-preview .event-input__additional-info { 
     text-align: center;
     margin: 20px auto;
+}
+
+.event-input_time {
+    width: 90px;
+}
+
+.rc-time-picker-input {
+    border: none;
 }
