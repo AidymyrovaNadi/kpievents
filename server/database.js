@@ -65,9 +65,12 @@ const postEvents = (parsedReq, callback) => {
     public.vevent(id_editor, id_writer, title, description, place, datetime) 
     VALUES($1, $2, $3, $4, $5, $6) RETURNING *`;
 
+    const insertData = Object.values(parsedReq.data);
+    console.log(insertData);
+
     const query = {
       text: EVENT_INSERT,
-      value: parsedReq.data,
+      value: insertData,
     };
 
     pool.query(query.text, query.value, (err, res) => {
