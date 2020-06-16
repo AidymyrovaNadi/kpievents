@@ -61,8 +61,8 @@ const setAdminCommand = (command, callback) => {
 
 setAdminCommand('sendEvents', () => {
 
-  const HOUR_TO_SEND = 12;
-  const MSEC_INTERVAL = 24 * 60 * 60 * 1000;
+  const HOUR_TO_SEND = 16;
+  const MSEC_INTERVAL = 60 * 60 * 1000;
 
   const timeToSend = new Date();
 
