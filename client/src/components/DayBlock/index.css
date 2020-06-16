@@ -1,5 +1,5 @@
 .day-block {
-    margin: 20px;
+    margin: 40px 20px;
     display: flex;
     flex-direction: column;
     background: var(--white);
@@ -48,10 +48,8 @@
 }
 
 .event-type-text {
-    width: 80px;
+    display: inline-block;
     height: 24px;
-    vertical-align: middle;
-    text-align: center;
     line-height: 23px;
     padding: 0 7px;
     color: var(--orange);
@@ -86,8 +84,12 @@
     width: 15vw;
 }
 
-.event-description {
+.event-description { 
     color: var(--gray-dark);
     display: none;
     margin-top: 10px;
+}
+
+.event-additional-info {
+    max-width: 200px;
 }

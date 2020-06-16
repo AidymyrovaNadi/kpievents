@@ -292,6 +292,7 @@ function Main() {
   }
 
   const arr = events.response;
+  console.log(arr)
 
   return (
     <div className="main">
@@ -302,7 +303,6 @@ function Main() {
       <div className='column'>
         <DayBlock info={arr[1]}/>
         <DayBlock info={arr[4]}/>
-        <DayBlock info={arr[6]}/>
       </div>
       <div className='column'>
         <DayBlock info={arr[2]}/>
