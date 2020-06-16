@@ -18,7 +18,24 @@ function Edit() {
   }
 
   const onDateChangeListener = date => {
+    const time = event.datetime
+    date.setHours(time.getHours())
+    date.setMinutes(time.getMinutes())
     setEvent({...event, datetime: date})
+  }
+
+  const onTimeChangeListener = e => {
+    const time = e.target
+    if (time.value.length == 2) time.value += ":"
+    if (time.value.length > 5) time.value = time.value.substring(0, 5)
+  }
+
+  const onTimeBlurListener = e => {
+    const time = e.target.value.split(":")
+    const current = event.datetime
+    current.setHours(time[0])
+    current.setMinutes(time[1])
+    setEvent({...event, datetime: current })
   }
 
   return (
@@ -34,8 +51,7 @@ function Edit() {
             format="day/month/year"
           />
         </DateContainer>
-        <div className="event-input_default event-input_time">
-        </div>
+        <input type="text" placeholder="Час" className="event-input_default event-input_time" onChange={ onTimeChangeListener } onBlur={ onTimeBlurListener }/>
         <input type="text" placeholder="Короткий заголовок" className="event-input_default event-input_name" onChange={ onChangeListener.bind({}, "title") }/>
         <textarea placeholder="Опис події" className="event-input_default event-input_description" onChange={ onChangeListener.bind({}, "description") }/>
         <input type="text" placeholder="Місце проведення" className="event-input_default event-input_place" onChange={ onChangeListener.bind({}, "place") }/>
