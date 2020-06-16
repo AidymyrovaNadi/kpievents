@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import SelectDatepicker from 'react-select-datepicker'
+import SelectDatepicker from 'react-select-datepicker';
 
 const StyledSelectDatepicker = styled(SelectDatepicker)`
   .rid_date-container {
