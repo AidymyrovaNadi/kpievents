@@ -19,12 +19,11 @@ function Edit() {
   const [isValid, setIsValid] = useState(false)
 
   const validator = () => {
-    setIsValid(true)
+    let flag = true
     for (const [key, value] of Object.entries(event)){
-      setIsValid(isValid && (value !== defaultEvent[key]) && (value !== ""))
-      console.log(key + " " + value + " " + defaultEvent[key] + " " + isValid)
+      flag = flag && (value !== defaultEvent[key]) && (value !== "")
     }
-    console.log("--------------------------------------")
+    setIsValid(flag)
     if(isValid) buttonRef.current.style.color = "var(--white)"
     else buttonRef.current.style.color = "var(--orange-light)"
   }
@@ -60,7 +59,7 @@ function Edit() {
   }
 
   const onSubmitListener = e => {
-    if (validator()) {
+    if (isValid) {
       console.log("Asdfasdfasdfa")
     } 
   }
@@ -83,7 +82,7 @@ function Edit() {
         <textarea placeholder="Опис події" className="event-input_default event-input_description" onChange={ onChangeListener.bind({}, "description") }/>
         <input type="text" placeholder="Місце проведення" className="event-input_default event-input_place" onChange={ onChangeListener.bind({}, "place") }/>
 
-        <button ref={ buttonRef } className="event-input__confirm">Зберегти</button>
+        <button ref={ buttonRef } className="event-input__confirm" onClick={ onSubmitListener }>Зберегти</button>
 
         <p className="event-input__additional-info">Хочемо зазначити, що редагувати подію, після збережнння, не можливо. Для видалення події повідомте нас <b><a href="mailto:sashkaborshosh@gmail.com?subject=Видалення події.">events</a></b>.</p>
       </div>
