@@ -1,5 +1,5 @@
 .main_edit {
-	height: 90vh;
+	min-height: 90vh;
 	background: var(--primary);
     display: flex;
     flex-flow: row nowrap;
@@ -13,7 +13,6 @@
 }
 
 .event-preview {
-    text-align: center;
     margin: 70px auto auto auto;
 }
 
@@ -36,24 +35,13 @@
     border-radius: 15px;
     background: var(--white);
     font-size: 16px;
-    color: var(--gray-light);
+    color: var(--gray-dark);
     padding: 14px;
     margin: 10px;
     height: 26px;
     font-family: 'Roboto', sans-serif;
 }
 
-.event-input_date {
-    width: 90px;
-}
-
-.event-input_month {
-    width: 110px;
-}
-
-.event-input_time{
-    width: 76px;
-}
 
 .event-input_name{
     width: 296px;
@@ -108,4 +96,17 @@
     font-weight: 400;
     letter-spacing: 0.3px; 
     width: 330px;
+}
+
+.event-preview .event-input__additional-info { 
+    text-align: center;
+    margin: 20px auto;
+}
+
+.event-input_time {
+    width: 90px;
+}
+
+.rc-time-picker-input {
+    border: none;
 }

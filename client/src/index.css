@@ -38,6 +38,11 @@ table {
     border-spacing: 0;
 }
 
+a :hover, :visited, :active, :link {
+    color: var(--orange);
+    text-decoration: none
+}
+
 :hover, :focus, :active {
     outline: 0;
     outline-offset: 0;
@@ -69,12 +74,12 @@ table {
     flex-flow: row nowrap;
     justify-content: center;
     align-items: center;
+    
 }
 
 .header img {
     height: 70%;
     width: auto;
-
     margin: 0 auto;
 }
 
@@ -92,6 +97,10 @@ body {
 
 input:focus::placeholder {
   color: transparent;
+}
+
+textarea:focus::placeholder {
+    color: transparent;
 }
 
 
