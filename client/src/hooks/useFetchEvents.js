@@ -1,5 +1,4 @@
 import useFetch from './useFetch';
-import { useEffect, useState } from 'react';
 
 const useFetchEvents = () => {
 
