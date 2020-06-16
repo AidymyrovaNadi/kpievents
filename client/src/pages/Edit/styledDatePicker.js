@@ -11,7 +11,7 @@ const StyledSelectDatepicker = styled(SelectDatepicker)`
      
       select {
       	height: 54px;
-        color: var(--gray-light);
+        color: var(--gray-dark);
         font-size: 16px;
         padding: 14px;
         border-radius: 15px;
