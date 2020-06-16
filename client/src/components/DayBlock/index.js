@@ -42,19 +42,20 @@ const arr = [
 
 ]
 
-  const descriptionRef = React.createRef()
   let date = new Date(arr[0].datetime)
   const days = ["Неділя", "Понеділок", "Вівторок", "Середа", "Четвер", "П'ятниця", "Субота"]
 
-  const showDescription = () => {
-    const style = descriptionRef.current.style
+  const showDescription = (e) => {
+    console.log(e.target.parentNode.childNodes)
+    const elements = e.target.parentNode.childNodes
+    const style = elements[elements.length-1].style
     style.display === "flex" ? style.display = "none" : style.display = "flex"
   }
 
   return (
     <div className="day-block">
       <div className="event-date-container">
-        <p className="date-style">{ `${date.getDate()}.${date.getMonth()+1}.${date.getFullYear()}` }</p>
+        <p className="date-style">{ date.toLocaleDateString("ru-RU") }</p>
       </div>
 
       <p className="week-style">{ days[date.getDay()] }</p>
@@ -63,11 +64,13 @@ const arr = [
           date = new Date(item.datetime)
           return (
             <div className="event-container" key={i}>
-              <p className="event-time-default">{ `${date.getHours()}:${date.getMinutes()}` }</p>
+              <p className="event-time-default">{ date.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" }) }</p>
               <div className="event-info">
                 <p className="event-type-text">{ item.place }</p>
-                <p className="event-default-text" onClick={ showDescription }>{ item.title }</p>
-                <p className="event-description" ref={ descriptionRef }>{ item.description }</p>
+                <div>
+                  <p className="event-default-text" onClick={ showDescription }>{ item.title }</p>
+                  <p className="event-description">{ item.description }</p>
+                </div>
               </div>
             </div>
           )

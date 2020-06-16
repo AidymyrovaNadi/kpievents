@@ -1,5 +1,5 @@
 .main_edit {
-	height: 90vh;
+	min-height: 90vh;
 	background: var(--primary);
     display: flex;
     flex-flow: row nowrap;
@@ -13,7 +13,6 @@
 }
 
 .event-preview {
-    text-align: center;
     margin: 70px auto auto auto;
 }
 
@@ -108,4 +107,9 @@
     font-weight: 400;
     letter-spacing: 0.3px; 
     width: 330px;
+}
+
+.event-preview .event-input__additional-info { 
+    text-align: center;
+    margin: 20px auto;
 }
