@@ -42,7 +42,7 @@ const arr = [
 
 ]
 
-  let date = new Date(arr[0].datetime)
+  let date = new Date(props.info[0].datetime)
   const days = ["Неділя", "Понеділок", "Вівторок", "Середа", "Четвер", "П'ятниця", "Субота"]
 
   const showDescription = (e) => {
@@ -60,7 +60,7 @@ const arr = [
 
       <p className="week-style">{ days[date.getDay()] }</p>
       {
-        arr.map( (item, i) => {
+        props.info.map( (item, i) => {
           date = new Date(item.datetime)
           return (
             <div className="event-container" key={i}>

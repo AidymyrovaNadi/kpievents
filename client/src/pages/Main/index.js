@@ -7,20 +7,27 @@ import useFetchEvents from '../../hooks/useFetchEvents';
 function Main() {
 
   const events = useFetchEvents()
+
+  if (!events.response) {
+    return <div>Loading...</div>;
+  }
+
+  const arr = events.response;
+
   return (
     <div className="main">
       <div className='column'>
-        <DayBlock info={events[0]}/>
-        <DayBlock info={events[3]}/>
+        <DayBlock info={arr[0]}/>
+        <DayBlock info={arr[3]}/>
       </div>
       <div className='column'>
-        <DayBlock info={events[1]}/>
-        <DayBlock info={events[4]}/>
-        <DayBlock info={events[6]}/>
+        <DayBlock info={arr[1]}/>
+        <DayBlock info={arr[4]}/>
+        <DayBlock info={arr[6]}/>
       </div>
       <div className='column'>
-        <DayBlock info={events[2]}/>
-        <DayBlock info={events[5]}/>
+        <DayBlock info={arr[2]}/>
+        <DayBlock info={arr[5]}/>
       </div>
     </div>
   );
