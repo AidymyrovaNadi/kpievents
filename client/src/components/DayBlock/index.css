@@ -66,6 +66,7 @@
     font-size: 18px;
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
+    cursor: pointer;
 }
 
 
@@ -84,7 +85,7 @@
     width: 15vw;
 }
 
-.event-description { 
+.event-description {
     color: var(--gray-dark);
     display: none;
     margin-top: 10px;

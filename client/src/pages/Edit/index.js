@@ -1,8 +1,10 @@
 import React, { useState, useRef } from 'react';
-import './index.css';
-import { Link } from 'react-router-dom';
+import usePostEvents from '../../hooks/usePostEvents';
+
 import DayBlock from '../../components/DayBlock';
 import { StyledSelectDatepicker, DateContainer } from './styledDatePicker.js'
+
+import './index.css';
 
 function Edit() {
 
@@ -33,7 +35,6 @@ function Edit() {
     validator()
   }
 
-
   const onDateChangeListener = date => {
     const time = event.datetime
     date.setHours(time.getHours())
@@ -60,8 +61,8 @@ function Edit() {
 
   const onSubmitListener = e => {
     if (isValid) {
-      console.log("Asdfasdfasdfa")
-    } 
+      console.log('sent');
+    }
   }
 
   return (
