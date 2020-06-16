@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import './index.css';
 import { Link } from 'react-router-dom';
 import DayBlock from '../../components/DayBlock';
@@ -6,28 +6,48 @@ import { StyledSelectDatepicker, DateContainer } from './styledDatePicker.js'
 
 function Edit() {
 
-  const [event, setEvent] = useState({
+  const buttonRef = useRef(null)
+
+  const defaultEvent = {
     datetime: new Date(),
     place: "Місце проведення",
     title: "Короткий заголовок",
     description: "Опис події",
-  })
+  }
+
+  const [event, setEvent] = useState(defaultEvent)
+  const [isValid, setIsValid] = useState(false)
+
+  const validator = () => {
+    setIsValid(true)
+    for (const [key, value] of Object.entries(event)){
+      setIsValid(isValid && (value !== defaultEvent[key]) && (value !== ""))
+      console.log(key + " " + value + " " + defaultEvent[key] + " " + isValid)
+    }
+    console.log("--------------------------------------")
+    if(isValid) buttonRef.current.style.color = "var(--white)"
+    else buttonRef.current.style.color = "var(--orange-light)"
+  }
 
   const onChangeListener = (name, e) => {
     setEvent({...event, [name]: e.target.value})
+    validator()
   }
+
 
   const onDateChangeListener = date => {
     const time = event.datetime
     date.setHours(time.getHours())
     date.setMinutes(time.getMinutes())
     setEvent({...event, datetime: date})
+    validator()
   }
 
   const onTimeChangeListener = e => {
     const time = e.target
-    if (time.value.length == 2) time.value += ":"
+    if (time.value.length === 2) time.value += ":"
     if (time.value.length > 5) time.value = time.value.substring(0, 5)
+    validator()
   }
 
   const onTimeBlurListener = e => {
@@ -36,6 +56,13 @@ function Edit() {
     current.setHours(time[0])
     current.setMinutes(time[1])
     setEvent({...event, datetime: current })
+    validator()
+  }
+
+  const onSubmitListener = e => {
+    if (validator()) {
+      console.log("Asdfasdfasdfa")
+    } 
   }
 
   return (
@@ -56,7 +83,7 @@ function Edit() {
         <textarea placeholder="Опис події" className="event-input_default event-input_description" onChange={ onChangeListener.bind({}, "description") }/>
         <input type="text" placeholder="Місце проведення" className="event-input_default event-input_place" onChange={ onChangeListener.bind({}, "place") }/>
 
-        <button className="event-input__confirm">Зберегти</button>
+        <button ref={ buttonRef } className="event-input__confirm">Зберегти</button>
 
         <p className="event-input__additional-info">Хочемо зазначити, що редагувати подію, після збережнння, не можливо. Для видалення події повідомте нас <b><a href="mailto:sashkaborshosh@gmail.com?subject=Видалення події.">events</a></b>.</p>
       </div>
