@@ -2,7 +2,7 @@ import useFetch from './useFetch';
 
 const usePostEvents = (event) => {
 
-  const url = `http://localhost:8000/api/events`;
+  const url = `http://kpievents.herokuapp.com/api/events`;
 
   const options = {
     method: 'POST',

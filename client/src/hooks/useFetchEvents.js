@@ -10,7 +10,7 @@ const useFetchEvents = () => {
   const endDate = new Date(startDate);
   endDate.setDate(endDate.getDate() + 8);
 
-  const url = `http://localhost:8000/api/events&startdate=${startDate.toISOString()}&enddate=${endDate.toISOString()}`;
+  const url = `http://kpievents.herokuapp.com/api/events&startdate=${startDate.toISOString()}&enddate=${endDate.toISOString()}`;
 
   const options = {
     method: 'GET',
