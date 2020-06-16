@@ -10,8 +10,7 @@ const getToday = async () => {
   todayDate.setUTCMinutes(0);
   todayDate.setUTCSeconds(0);
 
-  console.log(`http://localhost:8000/api/events&startdate=${todayDate.toISOString()}`);
-  const response = await fetch(`http://localhost:8000/api/events&startdate=${todayDate.toISOString()}`, {
+  const response = await fetch(`https://kpievents.herokuapp.com/api/events&startdate=${todayDate.toISOString()}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
