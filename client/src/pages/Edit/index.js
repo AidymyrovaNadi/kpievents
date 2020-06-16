@@ -3,7 +3,6 @@ import './index.css';
 import { Link } from 'react-router-dom';
 import DayBlock from '../../components/DayBlock';
 import { StyledSelectDatepicker, DateContainer } from './styledDatePicker.js'
-import TimePicker from 'react-time-picker';
 
 function Edit() {
 
@@ -36,20 +35,16 @@ function Edit() {
           />
         </DateContainer>
         <div className="event-input_default event-input_time">
-          <TimePicker 
-            disableClock={ true }
-            clearIcon={ null }
-          />
         </div>
         <input type="text" placeholder="Короткий заголовок" className="event-input_default event-input_name" onChange={ onChangeListener.bind({}, "title") }/>
-        <textarea type="text" placeholder="Опис події" className="event-input_default event-input_description" onChange={ onChangeListener.bind({}, "description") }/>
+        <textarea placeholder="Опис події" className="event-input_default event-input_description" onChange={ onChangeListener.bind({}, "description") }/>
         <input type="text" placeholder="Місце проведення" className="event-input_default event-input_place" onChange={ onChangeListener.bind({}, "place") }/>
 
         <button className="event-input__confirm">Зберегти</button>
 
         <p className="event-input__additional-info">Хочемо зазначити, що редагувати подію, після збережнння, не можливо. Для видалення події повідомте нас <b><a href="mailto:sashkaborshosh@gmail.com?subject=Видалення події.">events</a></b>.</p>
       </div>
-      
+
       <div className="event-preview">
         <DayBlock info={[event]}/>
         <p className="event-input__additional-info">Щоб розгорнути подію <b style={{ color: "var(--orange)"} }>натисніть</b> на неї.</p>

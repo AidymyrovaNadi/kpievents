@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import SelectDatepicker from 'react-select-datepicker'
+import SelectDatepicker from 'react-select-datepicker';
 
 const StyledSelectDatepicker = styled(SelectDatepicker)`
   .rid_date-container {
@@ -11,7 +11,7 @@ const StyledSelectDatepicker = styled(SelectDatepicker)`
      
       select {
       	height: 54px;
-        color: var(--gray-light);
+        color: var(--gray-dark);
         font-size: 16px;
         padding: 14px;
         border-radius: 15px;
